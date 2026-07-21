@@ -24,7 +24,7 @@ public class Bolsa {
 	}
 	
 	public ArrayList<Persona> conectarCandidatos(Oferta of) {
-		ArrayList<Persona> cands;
+		ArrayList<Persona> cands = null;
 		return cands;
  	}
 	public ArrayList<Empresa> getLasEmpresas() {

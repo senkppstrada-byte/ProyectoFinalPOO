@@ -2,12 +2,22 @@ package logica;
 
 import java.util.ArrayList;
 
+import logico.Bolsa;
+
 public class BolsaLaboral {
 
 	private ArrayList<CentroEmpleador> centros;
 	private ArrayList<Candidato> candidatos;
 	private ArrayList<Vacante> vacantes;
 	private ArrayList<Postulacion> postulaciones;
+	private static BolsaLaboral bolsa = null;
+	
+	public static BolsaLaboral getInstancia() {
+		if(bolsa == null) {
+			bolsa = new BolsaLaboral();
+		}
+		return bolsa;
+	}
 
 	public BolsaLaboral() {
 		centros = new ArrayList<CentroEmpleador>();

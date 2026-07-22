@@ -152,5 +152,13 @@ public class Vacante {
 		return plazasOcupadas < plazasTotales;
 	}
 	
+	public void ocuparPlaza() {
+		if (hayPlazasDisponibles()) {
+			plazasOcupadas = plazasOcupadas + 1;
+			if (!hayPlazasDisponibles()) {
+				estado = "CERRADA";
+			}
+		}
+	}
 	
 }

@@ -2,8 +2,6 @@ package logica;
 
 import java.util.ArrayList;
 
-import logico.Bolsa;
-
 public class BolsaLaboral {
 
 	private ArrayList<CentroEmpleador> centros;
@@ -25,6 +23,11 @@ public class BolsaLaboral {
 		vacantes = new ArrayList<Vacante>();
 		postulaciones = new ArrayList<Postulacion>();
 	}
+	
+	public ArrayList<Candidato> conectarCandidatos(Vacante vac) {
+		ArrayList<Candidato> cands = null;
+		return cands;
+ 	}
 
 	public ArrayList<CentroEmpleador> getCentros() {
 		return centros;

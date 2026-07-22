@@ -48,4 +48,12 @@ public class BolsaLaboral {
 		this.postulaciones = postulaciones;
 	}
 
+	public void registrarCandidato(Candidato candidato) {
+		candidatos.add(candidato);
+	}
+
+	public void registrarCentro(CentroEmpleador centro) {
+		centros.add(centro);
+	}
+
 }

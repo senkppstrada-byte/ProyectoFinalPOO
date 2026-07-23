@@ -28,7 +28,7 @@ public class BolsaLaboral {
 		ArrayList<Candidato> cands = null;
 		return cands;
  	}
-
+	
 	public ArrayList<CentroEmpleador> getCentros() {
 		return centros;
 	}
@@ -69,4 +69,21 @@ public class BolsaLaboral {
 		centros.add(centro);
 	}
 
+	public void publicarVacante(Vacante vac) {
+		vacantes.add(vac);
+	}
+	
+	public Candidato buscarCandidato(String ced) {
+		Candidato cand = null;
+		int i = 0;
+		boolean enc = false;
+		while (!enc && i<candidatos.size()) {
+			if(candidatos.get(i).getCedula().equalsIgnoreCase(ced)) {
+				cand = candidatos.get(i);
+				enc = true;
+			}
+			i++;
+		}
+		return cand;
+	}
 }

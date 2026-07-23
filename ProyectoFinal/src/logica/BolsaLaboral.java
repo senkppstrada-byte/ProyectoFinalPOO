@@ -3,7 +3,11 @@ package logica;
 import java.util.ArrayList;
 
 public class BolsaLaboral {
-
+	public static int generadorIdCuenta = 1;
+	public static int generadorIdCand = 1;
+	public static int generadorIdCent = 1;
+	public static int generadorIdVac = 1;
+	public static int generadorIdPos = 1;
 	private ArrayList<CentroEmpleador> centros;
 	private ArrayList<Candidato> candidatos;
 	private ArrayList<Vacante> vacantes;
@@ -26,6 +30,7 @@ public class BolsaLaboral {
 	
 	public ArrayList<Candidato> conectarCandidatos(Vacante vac) {
 		ArrayList<Candidato> cands = null;
+		
 		return cands;
  	}
 	
@@ -85,5 +90,18 @@ public class BolsaLaboral {
 			i++;
 		}
 		return cand;
+	}
+	public void publicarPostulacion(Postulacion p1) {
+		postulaciones.add(p1);
+	}
+	
+
+	public Candidato buscarCandidatoPorCuenta(CuentaUsuario cuenta) {
+	    for (Candidato c : candidatos) {
+	        if (c.getCuenta() != null && c.getCuenta().getId().equals(cuenta.getId())) {
+	            return c; 
+	        }
+	    }
+	    return null;
 	}
 }

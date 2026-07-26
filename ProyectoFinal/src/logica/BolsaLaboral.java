@@ -79,9 +79,9 @@ public class BolsaLaboral {
 		return porcentaje;
 	}
 	
-	public ArrayList<Candidato> conectarCandidatos(Vacante vac) {
+	public ArrayList<Postulacion> conectarCandidatos(Vacante vac) {
 		
-		ArrayList<Candidato> cands = new ArrayList<>();
+		ArrayList<Postulacion> cands = new ArrayList<>();
 	    if (vac == null) {
 	    	return cands;
 	    }
@@ -119,9 +119,9 @@ public class BolsaLaboral {
 	        }
 	    }
 
-	    if (max1 != null) cands.add(max1.getCandidato());
-	    if (max2 != null) cands.add(max2.getCandidato());
-	    if (max3 != null) cands.add(max3.getCandidato());
+	    if (max1 != null) cands.add(max1);
+	    if (max2 != null) cands.add(max2);
+	    if (max3 != null) cands.add(max3);
 
 	    return cands;
  	}
@@ -212,5 +212,14 @@ public class BolsaLaboral {
 
 	public void setCuentalog(CuentaUsuario cuentalog) {
 		this.cuentalog = cuentalog;
+	}
+
+	public Postulacion buscarPosPorId(String string) {
+		for (Postulacion p : postulaciones) {
+	        if (p.getId().equals(string)) {
+	            return p; 
+	        }
+	    }
+	    return null;
 	}
 }

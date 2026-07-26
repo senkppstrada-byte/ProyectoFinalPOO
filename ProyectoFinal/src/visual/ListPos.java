@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.time.LocalDate;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -20,23 +19,22 @@ import javax.swing.table.DefaultTableModel;
 import logica.BolsaLaboral;
 import logica.Candidato;
 import logica.Postulacion;
-import logica.Vacante;
 
-public class PostaVac extends JDialog {
+public class ListPos extends JDialog {
 
     private final JPanel contentPanel = new JPanel();
     private FondoMenu fondomenu;
-    private DefaultTableModel model; 
-    private Object[] row;            
-    private Vacante selected = null;
-    private JTable tblVac;           
+    private DefaultTableModel model;
+    private Object[] row;
+    private Postulacion selected = null;
+    private JTable tblPos;
     private JButton okButton;
     private JButton cancelButton;
     private Candidato cand = BolsaLaboral.getInstancia().buscarCandidatoPorCuenta(BolsaLaboral.getInstancia().getCuentalog());
 
-    public PostaVac() {
-        setTitle("Postularse a vacante");
-        setBounds(100, 100, 600, 350); 
+    public ListPos() {
+        setTitle("Lista de postulaciones");
+        setBounds(100, 100, 650, 350); 
         setLocationRelativeTo(null);
         
         fondomenu = new FondoMenu("/img/mant.png");
@@ -56,24 +54,24 @@ public class PostaVac extends JDialog {
         JScrollPane scrollPane = new JScrollPane();
         panel.add(scrollPane, BorderLayout.CENTER);
         
-        String[] headers = {"Código", "Empresa", "Puesto", "Descripción", "Rango Salarial", "Provincia", "Perfil Buscado"};
+        String[] headers = {"Código", "Empresa", "Puesto", "Fecha", "Estado"};
         model = new DefaultTableModel();
         model.setColumnIdentifiers(headers);
         
-        tblVac = new JTable();
-        tblVac.setModel(model);
-        tblVac.addMouseListener(new MouseAdapter() {
+        tblPos = new JTable();
+        tblPos.setModel(model);
+        tblPos.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                int index = tblVac.getSelectedRow();
+                int index = tblPos.getSelectedRow();
                 if (index >= 0) {
                     okButton.setEnabled(true);
-                    selected = BolsaLaboral.getInstancia().buscarVacPorId(tblVac.getValueAt(index, 0).toString());
+                    selected = BolsaLaboral.getInstancia().buscarPosPorId(tblPos.getValueAt(index, 0).toString());
                 }
             }
         });
         
-        scrollPane.setViewportView(tblVac);
+        scrollPane.setViewportView(tblPos);
 
         JPanel buttonPane = new JPanel();
         buttonPane.setOpaque(false);
@@ -81,29 +79,33 @@ public class PostaVac extends JDialog {
         fondomenu.add(buttonPane, BorderLayout.SOUTH);
 
         {
-            okButton = new JButton("Postularse");
+            okButton = new JButton("Cambiar Estado");
             okButton.setEnabled(false);            
             okButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     if (selected != null && cand != null) {
+                        
+                        String nuevoEstado = selected.getEstado().equalsIgnoreCase("activa") ? "inactiva" : "activa";
+                        
                         int opcion = JOptionPane.showConfirmDialog(
-                            PostaVac.this, 
-                            "¿Estás seguro que deseas postularte a la vacante?",  
+                            ListPos.this, 
+                            "Estas seguro que deseas cambiar el estado de la postulacion?",  
                             "Confirmar", 
                             JOptionPane.YES_NO_OPTION, 
                             JOptionPane.QUESTION_MESSAGE
                         );
                         
                         if (opcion == JOptionPane.YES_OPTION) {
-                            float por = BolsaLaboral.getInstancia().calcMatch(selected, cand);
-                            Postulacion pos = new Postulacion("P-" + BolsaLaboral.generadorIdPos, cand, selected, LocalDate.now(), por, "activa");
-                            BolsaLaboral.getInstancia().publicarPostulacion(pos);
-                            BolsaLaboral.generadorIdPos++;
-                            JOptionPane.showMessageDialog(PostaVac.this, "Postulación realizada con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                            dispose(); 
+                            selected.setEstado(nuevoEstado);
+                            
+                            JOptionPane.showMessageDialog(ListPos.this, "Cambio realizado con exito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                            
+                            loadPostulaciones();
+                            okButton.setEnabled(false);
+                            selected = null;
                         }
                     } else if (cand == null) {
-                        JOptionPane.showMessageDialog(PostaVac.this, "Error: No se encontró la información del candidato logueado.", "Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(ListPos.this, "Error: No se encontró la información del candidato logueado.", "Error", JOptionPane.ERROR_MESSAGE);
                     }
                 }
             });
@@ -118,23 +120,23 @@ public class PostaVac extends JDialog {
             buttonPane.add(cancelButton);
         }
         
-        loadVacantes();
+        loadPostulaciones();
     }
 
-    public void loadVacantes() {
+    public void loadPostulaciones() {
         model.setRowCount(0);
         row = new Object[model.getColumnCount()];
         
-        for (Vacante v : BolsaLaboral.getInstancia().getVacantes()) {
-            if (v.getEstado().equalsIgnoreCase("activa")) {
-                row[0] = v.getId();
-                row[1] = v.getCentro().getNombreComercial();
-                row[2] = v.getPuesto();
-                row[3] = v.getDescripcion();
-                row[4] = v.getSalarioMin() + " - " + v.getSalarioMax();
-                row[5] = v.getProvincia();
-                row[6] = v.getPerfilRequerido();
-                model.addRow(row);
+        if (cand != null) {
+            for (Postulacion p : BolsaLaboral.getInstancia().getPostulaciones()) {
+                if (p.getCandidato() != null && p.getCandidato().getId().equalsIgnoreCase(cand.getId())) {
+                    row[0] = p.getId();
+                    row[1] = p.getVacante().getCentro().getNombreComercial();
+                    row[2] = p.getVacante().getPuesto();
+                    row[3] = p.getFecha();
+                    row[4] = p.getEstado();
+                    model.addRow(row);
+                }
             }
         }
     }

@@ -2,54 +2,128 @@ package visual;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.time.LocalDate;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+
+import logica.BolsaLaboral;
+import logica.Candidato;
+import logica.CentroEmpleador;
+import logica.Postulacion;
+import logica.Vacante;
 
 public class ListVacan extends JDialog {
 
-	private final JPanel contentPanel = new JPanel();
+    private final JPanel contentPanel = new JPanel();
+    private FondoMenu fondomenu;
+    private DefaultTableModel model; 
+    private Object[] row;            
+    private Vacante selected = null;
+    private JTable tblVac;           
+    private JButton okButton;
+    private JButton cancelButton;
+    private CentroEmpleador emp = BolsaLaboral.getInstancia().buscarCentroPorCuenta(BolsaLaboral.getInstancia().getCuentalog());
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		try {
-			ListVacan dialog = new ListVacan();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+    public ListVacan() {
+        setTitle("Lista de vacantes");
+        setBounds(100, 100, 600, 350); 
+        setLocationRelativeTo(null);
+        
+        fondomenu = new FondoMenu("/img/mant.png");
+        fondomenu.setLayout(new BorderLayout());
+        setContentPane(fondomenu); 
 
-	/**
-	 * Create the dialog.
-	 */
-	public ListVacan() {
-		setBounds(100, 100, 450, 300);
-		getContentPane().setLayout(new BorderLayout());
-		contentPanel.setLayout(new FlowLayout());
-		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		getContentPane().add(contentPanel, BorderLayout.CENTER);
-		{
-			JPanel buttonPane = new JPanel();
-			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
-			getContentPane().add(buttonPane, BorderLayout.SOUTH);
-			{
-				JButton okButton = new JButton("OK");
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
-			}
-			{
-				JButton cancelButton = new JButton("Cancel");
-				cancelButton.setActionCommand("Cancel");
-				buttonPane.add(cancelButton);
-			}
-		}
-	}
+        contentPanel.setOpaque(false);
+        contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+        fondomenu.add(contentPanel, BorderLayout.CENTER);
+        contentPanel.setLayout(new BorderLayout(0, 0));
+        
+        JPanel panel = new JPanel();
+        panel.setOpaque(false);
+        contentPanel.add(panel, BorderLayout.CENTER);
+        panel.setLayout(new BorderLayout(0, 0));
+        
+        JScrollPane scrollPane = new JScrollPane();
+        panel.add(scrollPane, BorderLayout.CENTER);
+        
+        String[] headers = {"Código", "Empresa", "Puesto", "Descripción", "Rango Salarial", "Provincia", "Perfil Buscado"};
+        model = new DefaultTableModel();
+        model.setColumnIdentifiers(headers);
+        
+        tblVac = new JTable();
+        tblVac.setModel(model);
+        tblVac.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int index = tblVac.getSelectedRow();
+                if (index >= 0) {
+                    okButton.setEnabled(true);
+                    selected = BolsaLaboral.getInstancia().buscarVacPorId(tblVac.getValueAt(index, 0).toString());
+                }
+            }
+        });
+        
+        scrollPane.setViewportView(tblVac);
 
+        JPanel buttonPane = new JPanel();
+        buttonPane.setOpaque(false);
+        buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        fondomenu.add(buttonPane, BorderLayout.SOUTH);
+
+        {
+            okButton = new JButton("Ver candidatos");
+            okButton.setEnabled(false);            
+            okButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    if (selected != null && emp != null) {
+                                                   
+                       
+                        
+                    } else if (emp == null) {
+                        JOptionPane.showMessageDialog(ListVacan.this, "Error: No se encontró la información del candidato logueado.", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            });
+            okButton.setActionCommand("OK");
+            buttonPane.add(okButton);
+            getRootPane().setDefaultButton(okButton);
+        }
+        {
+            cancelButton = new JButton("Cancelar");
+            cancelButton.setActionCommand("Cancel");
+            cancelButton.addActionListener(e -> dispose());
+            buttonPane.add(cancelButton);
+        }
+        
+        loadVacantes();
+    }
+
+    public void loadVacantes() {
+        model.setRowCount(0);
+        row = new Object[model.getColumnCount()];
+        
+        for (Vacante v : BolsaLaboral.getInstancia().getVacantes()) {
+            if (v.getEstado().equalsIgnoreCase("activa")) {
+                row[0] = v.getId();
+                row[1] = v.getCentro().getNombreComercial();
+                row[2] = v.getPuesto();
+                row[3] = v.getDescripcion();
+                row[4] = v.getSalarioMin() + " - " + v.getSalarioMax();
+                row[5] = v.getProvincia();
+                row[6] = v.getPerfilRequerido();
+                model.addRow(row);
+            }
+        }
+    }
 }

@@ -196,6 +196,15 @@ public class BolsaLaboral {
 	    }
 	    return null;
 	}
+	
+	public CentroEmpleador buscarCentroPorCuenta(CuentaUsuario cuenta) {
+	    for (CentroEmpleador c : centros) {
+	        if (c.getRep().getCuenta() != null && c.getRep().getCuenta().getId().equals(cuenta.getId())) {
+	            return c; 
+	        }
+	    }
+	    return null;
+	}
 
 	public Vacante buscarVacPorId(String string) {
 		for (Vacante v : vacantes) {

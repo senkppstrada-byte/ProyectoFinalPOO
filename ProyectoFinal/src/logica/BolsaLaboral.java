@@ -49,12 +49,12 @@ public class BolsaLaboral {
 		if (vac.getPerfilRequerido().equalsIgnoreCase("tecnico") && can instanceof Tecnico) {
 			porcentaje += 10;
 			Tecnico tec = (Tecnico) can;
-			porcentaje += (2 * tec.getAexperiencia());
+			porcentaje += (2 * tec.getAniosExperiencia());
 		}
 		else if (vac.getPerfilRequerido().equalsIgnoreCase("profesional") && can instanceof Profesional) {
 			porcentaje += 10;
 			Profesional pro = (Profesional) can;
-			if (pro.getTituloUniv != null && !pro.getTituloUniv().isEmpty()) {
+			if (pro.getTituloUniversitario() != null && !pro.getTituloUniversitario().isEmpty()) {
 				porcentaje += 15;
 			}
 		}

@@ -20,25 +20,4 @@ public class Profesional extends Candidato {
 		this.tituloUniversitario = tituloUniversitario;
 	}
 
-	@Override
-	public int evaluarRequisitos(Vacante vacante) {
-		int puntos = 0;
-
-		if (vacante.getPerfilRequerido().equalsIgnoreCase("PROFESIONAL")) {
-			puntos = puntos + 20;
-		} else {
-			puntos = puntos + 5;
-		}
-
-		if (tituloUniversitario != null && !tituloUniversitario.trim().isEmpty()) {
-			puntos = puntos + 10;
-		}
-
-		return puntos;
-	}
-
-	@Override
-	public String toString() {
-		return "PROFESIONAL " + super.toString() + " | Titulo: " + tituloUniversitario;
-	}
 }

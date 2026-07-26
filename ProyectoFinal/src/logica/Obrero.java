@@ -26,27 +26,5 @@ public class Obrero extends Candidato {
 		this.destrezas = destrezas;
 	}
 
-	@Override
-	public int evaluarRequisitos(Vacante vacante) {
-		int puntos = 0;
-
-		if (vacante.getPerfilRequerido().equalsIgnoreCase("OBRERO")) {
-			puntos = puntos + 20;
-		} else {
-			puntos = puntos + 5;
-		}
-
-		if (destrezas.size() >= 3) {
-			puntos = puntos + 10;
-		} else if (destrezas.size() >= 1) {
-			puntos = puntos + 5;
-		}
-
-		return puntos;
-	}
-
-	@Override
-	public String toString() {
-		return "OBRERO    " + super.toString() + " | Destrezas: " + destrezas;
-	}
+	
 }

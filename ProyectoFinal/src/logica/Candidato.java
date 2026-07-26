@@ -1,6 +1,6 @@
 package logica;
 
-public class Candidato {
+public abstract class Candidato {
 
 	protected String id;
 	protected String cedula;
@@ -96,39 +96,5 @@ public class Candidato {
 	public void setCuenta(CuentaUsuario cuenta) {
 		this.cuenta = cuenta;
 	}
-	
-	public abstract int evaluarRequisitos(Vacante vacante);
-
-	public float calcularCoincidencia(Vacante vacante) {
-		float puntos = 0;
-
-		if (provincia.equalsIgnoreCase(vacante.getProvincia())) {
-			puntos = puntos + 25;
-		} else if (disponibleMudarse) {
-			puntos = puntos + 15;
-		}
-
-		if (aspiracionSalarial <= vacante.getSalarioMax()) {
-			puntos = puntos + 25;
-		} else if (aspiracionSalarial <= vacante.getSalarioMax() * 1.10f) {
-			puntos = puntos + 10;
-		}
-
-		if (!vacante.isRequiereLicencia() || tieneLicencia) {
-			puntos = puntos + 20;
-		}
-
-		puntos = puntos + evaluarRequisitos(vacante);
-
-		return puntos;
-	}
-
-	@Override
-	public String toString() {
-		return "[" + id + "] " + nombreCompleto + " | Cedula: " + cedula
-				+ " | Provincia: " + provincia
-				+ " | Aspiracion: " + aspiracionSalarial
-				+ " | Licencia: " + (tieneLicencia ? "Si" : "No")
-				+ " | Se muda: " + (disponibleMudarse ? "Si" : "No");
-	}
+		
 }

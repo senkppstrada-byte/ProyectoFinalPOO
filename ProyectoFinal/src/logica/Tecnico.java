@@ -30,28 +30,4 @@ public class Tecnico extends Candidato {
 		this.aniosExperiencia = aniosExperiencia;
 	}
 
-	@Override
-	public int evaluarRequisitos(Vacante vacante) {
-		int puntos = 0;
-
-		if (vacante.getPerfilRequerido().equalsIgnoreCase("TECNICO")) {
-			puntos = puntos + 20;
-		} else {
-			puntos = puntos + 5;
-		}
-
-		if (aniosExperiencia >= 5) {
-			puntos = puntos + 10;
-		} else if (aniosExperiencia >= 2) {
-			puntos = puntos + 5;
-		}
-
-		return puntos;
-	}
-
-	@Override
-	public String toString() {
-		return "TECNICO   " + super.toString() + " | Area: " + areaEspecialidad + " | Experiencia: "
-				+ aniosExperiencia + " anios";
-	}
 }

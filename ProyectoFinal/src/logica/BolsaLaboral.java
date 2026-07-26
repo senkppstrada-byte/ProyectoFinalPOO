@@ -80,9 +80,50 @@ public class BolsaLaboral {
 	}
 	
 	public ArrayList<Candidato> conectarCandidatos(Vacante vac) {
-		ArrayList<Candidato> cands = null;
 		
-		return cands;
+		ArrayList<Candidato> cands = new ArrayList<>();
+	    if (vac == null) {
+	    	return cands;
+	    }
+	    Postulacion max1 = null;
+	    Postulacion max2 = null;
+	    Postulacion max3 = null;
+	    
+	    for (Postulacion p : postulaciones) {
+	        if (p.getVacante() != null && p.getVacante().getId().equals(vac.getId())) {
+	            if (p.getPorCoincidencia() >= vac.getCoincidenciaMinima()) {
+	                if (max1 == null || p.getPorCoincidencia() > max1.getPorCoincidencia()) {
+	                    max1 = p;
+	                }
+	            }
+	        }
+	    }
+
+	    for (Postulacion p : postulaciones) {
+	        if (p.getVacante() != null && p.getVacante().getId().equals(vac.getId())) {
+	            if (p.getPorCoincidencia() >= vac.getCoincidenciaMinima() && p != max1) {
+	                if (max2 == null || p.getPorCoincidencia() > max2.getPorCoincidencia()) {
+	                    max2 = p;
+	                }
+	            }
+	        }
+	    }
+
+	    for (Postulacion p : postulaciones) {
+	        if (p.getVacante() != null && p.getVacante().getId().equals(vac.getId())) {
+	            if (p.getPorCoincidencia() >= vac.getCoincidenciaMinima() && p != max1 && p != max2) {
+	                if (max3 == null || p.getPorCoincidencia() > max3.getPorCoincidencia()) {
+	                    max3 = p;
+	                }
+	            }
+	        }
+	    }
+
+	    if (max1 != null) cands.add(max1.getCandidato());
+	    if (max2 != null) cands.add(max2.getCandidato());
+	    if (max3 != null) cands.add(max3.getCandidato());
+
+	    return cands;
  	}
 	
 	public ArrayList<CentroEmpleador> getCentros() {

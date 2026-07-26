@@ -1,6 +1,6 @@
 package logica;
 
-public abstract class Candidato {
+public class Candidato {
 
 	protected String id;
 	protected String cedula;

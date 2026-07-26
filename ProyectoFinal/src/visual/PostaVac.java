@@ -10,6 +10,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import logica.BolsaLaboral;
+import logica.Candidato;
+import logica.Postulacion;
 import logica.Vacante;
 
 import javax.swing.JLabel;
@@ -17,6 +19,7 @@ import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.time.LocalDate;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -24,13 +27,13 @@ public class PostaVac extends JDialog {
 
     private final JPanel contentPanel = new JPanel();
     private FondoMenu fondomenu;
-    private static JTable tblClie;
 	private static DefaultTableModel model;
 	private static Object[] row;
 	private Vacante selected = null;
-	private JTable tblVac;
+	private static JTable tblVac;
 	private JButton okButton;
 	private JButton cancelButton;
+	private Candidato cand = BolsaLaboral.getInstancia().buscarCandidatoPorCuenta(BolsaLaboral.getInstancia().getCuentalog());
 
     public PostaVac() {
     	setTitle("Postularse a vacante");
@@ -82,6 +85,8 @@ public class PostaVac extends JDialog {
             JButton okButton = new JButton("Postularse");
             okButton.addActionListener(new ActionListener() {
             	public void actionPerformed(ActionEvent e) {
+            		
+            		Postulacion pos = new Postulacion("P-" + BolsaLaboral.generadorIdPos, cand, selected, LocalDate.now(), );
             	}
             });
             okButton.setActionCommand("OK");

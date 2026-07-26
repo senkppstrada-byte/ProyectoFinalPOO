@@ -33,7 +33,7 @@ public class Vacante {
 		this.coincidenciaMinima = coincidenciaMinima;
 		this.plazasTotales = plazasTotales;
 		this.plazasOcupadas = 0;
-		this.estado = "ABIERTA";
+		this.estado = "abierta";
 	}
 
 	public String getId() {

@@ -96,4 +96,6 @@ public class Candidato {
 	public void setCuenta(CuentaUsuario cuenta) {
 		this.cuenta = cuenta;
 	}
+	
+	
 }

@@ -13,6 +13,7 @@ public class BolsaLaboral {
 	private ArrayList<Vacante> vacantes;
 	private ArrayList<Postulacion> postulaciones;
 	private static BolsaLaboral bolsa = null;
+	private CuentaUsuario cuentalog;
 	
 	public static BolsaLaboral getInstancia() {
 		if(bolsa == null) {
@@ -26,6 +27,52 @@ public class BolsaLaboral {
 		candidatos = new ArrayList<Candidato>();
 		vacantes = new ArrayList<Vacante>();
 		postulaciones = new ArrayList<Postulacion>();
+		cuentalog = null;
+	}
+	
+	public float calcMatch(Vacante vac, Candidato can) {
+		float porcentaje = 0.0f;
+		if (vac.getProvincia().equalsIgnoreCase(can.getProvincia())){
+			porcentaje += 10;
+		}
+		if (vac.isRequiereLicencia() && can.isTieneLicencia()) {
+			porcentaje += 10;
+		}
+		if (vac.isRequiereMudanza() && can.isDisponibleMudarse()) {
+			porcentaje += 10;
+		}
+		
+		if (vac.getPerfilRequerido().equalsIgnoreCase("tecnico") && can instanceof Tecnico) {
+			porcentaje += 10;
+			Tecnico tec = (Tecnico) can;
+			porcentaje += (2 * tec.getAexperiencia());
+		}
+		else if (vac.getPerfilRequerido().equalsIgnoreCase("profesional") && can instanceof Profesional) {
+			porcentaje += 10;
+			Profesional pro = (Profesional) can;
+			if (pro.getTituloUniv != null && !pro.getTituloUniv().isEmpty()) {
+				porcentaje += 15;
+			}
+		}
+		else if (vac.getPerfilRequerido().equalsIgnoreCase("obrero") && can instanceof Obrero) {
+			porcentaje += 10;
+			Obrero ob = (Obrero) can;
+			if (ob.getDestrezas() != null) {
+			    float puntosDestrezas = 2.0f * ob.getDestrezas().size();
+			    
+			    if (puntosDestrezas > 20.0f) {
+			        puntosDestrezas = 20.0f;
+			    }
+			    
+			    porcentaje += puntosDestrezas;
+			}
+		}
+		
+		if (porcentaje > 100.0f) {
+	        porcentaje = 100.0f;
+	    }
+		
+		return porcentaje;
 	}
 	
 	public ArrayList<Candidato> conectarCandidatos(Vacante vac) {
@@ -112,5 +159,13 @@ public class BolsaLaboral {
 	        }
 	    }
 	    return null;
+	}
+
+	public CuentaUsuario getCuentalog() {
+		return cuentalog;
+	}
+
+	public void setCuentalog(CuentaUsuario cuentalog) {
+		this.cuentalog = cuentalog;
 	}
 }

@@ -39,6 +39,10 @@ public class BolsaLaboral {
 			porcentaje += 10;
 		}
 		if (vac.isRequiereMudanza() && can.isDisponibleMudarse()) {
+			porcentaje += 15;
+		}
+		
+		if ((can.getAspiracionSalarial() >= vac.getSalarioMin()) && (can.getAspiracionSalarial() <= vac.getSalarioMax())) {
 			porcentaje += 10;
 		}
 		

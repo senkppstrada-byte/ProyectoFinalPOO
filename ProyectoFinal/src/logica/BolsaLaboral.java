@@ -104,4 +104,13 @@ public class BolsaLaboral {
 	    }
 	    return null;
 	}
+
+	public Vacante buscarVacPorId(String string) {
+		for (Vacante v : vacantes) {
+	        if (v.getId().equals(string)) {
+	            return v; 
+	        }
+	    }
+	    return null;
+	}
 }

@@ -19,10 +19,11 @@ public class CuentaUsuario {
 		this.rol = rol;
 	}
 
-	public boolean validarCredenciales(String c, String r) {
-		//codigo temporal, pa q no de error
-		boolean valido = false;
-		return valido;
+	public boolean validarCredenciales(String cor, String nom, String cl, String r) {
+		if ((correo.equals(cor)) && (nombreUsuario.equals(nom)) && (clave.equals(cl)) && (rol.equals(r))) {
+			return true;
+		}
+		return false;
 	}
 
 

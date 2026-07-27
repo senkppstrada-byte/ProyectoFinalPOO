@@ -22,19 +22,35 @@ import logica.Vacante;
 
 public class publicarVac extends JDialog {
 
-    private final JPanel contentPanel = new JPanel();
-    private FondoMenu fondomenu;
-    private JTextField txtPuesto;
-    private JTextField txtDescripcion;
-    private JTextField txtSalMin;
-    private JTextField txtSalMax;
-    private JTextField txtProvincia;
-    private JTextField txtCoincidencia;
-    private JTextField txtPlazas;
-    private JComboBox<String> cmbPerfil;
-    private JCheckBox chkLicencia;
-    private JCheckBox chkMudanza;
-    private JButton okButton;
-    private JButton cancelButton;
-    private CentroEmpleador emp = BolsaLaboral.getInstancia().buscarCentroPorCuenta(BolsaLaboral.getInstancia().getCuentalog());
-} 
+	private final JPanel contentPanel = new JPanel();
+	private FondoMenu fondomenu;
+	private JTextField txtPuesto;
+	private JTextField txtDescripcion;
+	private JTextField txtSalMin;
+	private JTextField txtSalMax;
+	private JTextField txtProvincia;
+	private JTextField txtCoincidencia;
+	private JTextField txtPlazas;
+	private JComboBox<String> cmbPerfil;
+	private JCheckBox chkLicencia;
+	private JCheckBox chkMudanza;
+	private JButton okButton;
+	private JButton cancelButton;
+	private CentroEmpleador emp = BolsaLaboral.getInstancia().buscarCentroPorCuenta(BolsaLaboral.getInstancia().getCuentalog());
+
+	public publicarVac() {
+		setTitle("Publicar vacante");
+		setBounds(100, 100, 520, 420);
+		setLocationRelativeTo(null);
+
+		fondomenu = new FondoMenu("/img/mant.png");
+		fondomenu.setLayout(new BorderLayout());
+		setContentPane(fondomenu);
+
+		contentPanel.setOpaque(false);
+		contentPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+		fondomenu.add(contentPanel, BorderLayout.CENTER);
+		contentPanel.setLayout(new GridLayout(0, 2, 8, 8));
+	} 
+}	
+

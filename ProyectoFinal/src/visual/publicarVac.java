@@ -51,6 +51,51 @@ public class publicarVac extends JDialog {
 		contentPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
 		fondomenu.add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(new GridLayout(0, 2, 8, 8));
+		
+        contentPanel.add(new JLabel("Puesto:"));
+        txtPuesto = new JTextField();
+        contentPanel.add(txtPuesto);
+
+        contentPanel.add(new JLabel("Descripcion:"));
+        txtDescripcion = new JTextField();
+        contentPanel.add(txtDescripcion);
+
+        contentPanel.add(new JLabel("Salario minimo:"));
+        txtSalMin = new JTextField();
+        contentPanel.add(txtSalMin);
+
+        contentPanel.add(new JLabel("Salario maximo:"));
+        txtSalMax = new JTextField();
+        contentPanel.add(txtSalMax);
+
+        contentPanel.add(new JLabel("Provincia:"));
+        txtProvincia = new JTextField();
+        contentPanel.add(txtProvincia);
+
+        contentPanel.add(new JLabel("Perfil requerido:"));
+        cmbPerfil = new JComboBox<String>();
+        cmbPerfil.addItem("Tecnico");
+        cmbPerfil.addItem("Profesional");
+        cmbPerfil.addItem("Obrero");
+        contentPanel.add(cmbPerfil);
+
+        contentPanel.add(new JLabel("Coincidencia minima:"));
+        txtCoincidencia = new JTextField();
+        contentPanel.add(txtCoincidencia);
+
+        contentPanel.add(new JLabel("Plazas totales:"));
+        txtPlazas = new JTextField();
+        contentPanel.add(txtPlazas);
+
+        contentPanel.add(new JLabel("Requiere licencia:"));
+        chkLicencia = new JCheckBox();
+        chkLicencia.setOpaque(false);
+        contentPanel.add(chkLicencia);
+
+        contentPanel.add(new JLabel("Requiere mudanza:"));
+        chkMudanza = new JCheckBox();
+        chkMudanza.setOpaque(false);
+        contentPanel.add(chkMudanza);
 	} 
 }	
 

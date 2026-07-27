@@ -106,7 +106,7 @@ public class publicarVac extends JDialog {
             okButton = new JButton("Publicar");
             okButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    publicr();
+                    publicar();
                 }
             });
             okButton.setActionCommand("OK");
@@ -119,6 +119,42 @@ public class publicarVac extends JDialog {
             cancelButton.addActionListener(e -> dispose());
             buttonPane.add(cancelButton);
         }
-	} 
+	}
+	
+	
+	
+    public void publicar() {
+        if (emp == null) {
+            JOptionPane.showMessageDialog(this, "Error: No se encontro la informacion del centro logueado.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (txtPuesto.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Debes indicar el puesto de la vacante.", "Datos incompletos", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        float salMin;
+        float salMax;
+        float coincidencia;
+        int plazas;
+        try {
+            salMin = Float.parseFloat(txtSalMin.getText().trim());
+            salMax = Float.parseFloat(txtSalMax.getText().trim());
+            coincidencia = Float.parseFloat(txtCoincidencia.getText().trim());
+            plazas = Integer.parseInt(txtPlazas.getText().trim());
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Salario, coincidencia y plazas deben ser numeros validos.", "Datos invalidos", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        if (salMin > salMax) {
+            JOptionPane.showMessageDialog(this, "El salario minimo no puede ser mayor que el maximo.", "Datos invalidos", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (plazas <= 0) {
+            JOptionPane.showMessageDialog(this, "Las plazas totales deben ser mayores que cero.", "Datos invalidos", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+    }
 }	
 

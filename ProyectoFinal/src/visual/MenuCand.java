@@ -21,17 +21,6 @@ public class MenuCand extends JFrame {
 
     private FondoMenu contentPane;
 
-    public static void main(String[] args) {
-        EventQueue.invokeLater(() -> {
-            try {
-                MenuCand frame = new MenuCand();
-                frame.setVisible(true);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-    }
-
     public MenuCand() {
     	
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

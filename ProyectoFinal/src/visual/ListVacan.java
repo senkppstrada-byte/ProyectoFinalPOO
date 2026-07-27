@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.time.LocalDate;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -18,9 +17,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import logica.BolsaLaboral;
-import logica.Candidato;
 import logica.CentroEmpleador;
-import logica.Postulacion;
 import logica.Vacante;
 
 public class ListVacan extends JDialog {
@@ -30,7 +27,7 @@ public class ListVacan extends JDialog {
     private DefaultTableModel model; 
     private Object[] row;            
     private Vacante selected = null;
-    private JTable tblVac;           
+    private JTable tblVac;            
     private JButton okButton;
     private JButton cancelButton;
     private CentroEmpleador emp = BolsaLaboral.getInstancia().buscarCentroPorCuenta(BolsaLaboral.getInstancia().getCuentalog());
@@ -87,11 +84,19 @@ public class ListVacan extends JDialog {
             okButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
                     if (selected != null && emp != null) {
-                                                   
-                       
+                        SelCand dialog = new SelCand(selected);
+                        dialog.setModal(true);
+                        dialog.setVisible(true);
+                        
+                        loadVacantes();
+                        okButton.setEnabled(false);
+                        selected = null;
                         
                     } else if (emp == null) {
-                        JOptionPane.showMessageDialog(ListVacan.this, "Error: No se encontró la información del candidato logueado.", "Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(ListVacan.this, 
+                            "Error: No se encontró la información de la empresa logueada.", 
+                            "Error", 
+                            JOptionPane.ERROR_MESSAGE);
                     }
                 }
             });

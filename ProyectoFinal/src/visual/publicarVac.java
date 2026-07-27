@@ -96,6 +96,29 @@ public class publicarVac extends JDialog {
         chkMudanza = new JCheckBox();
         chkMudanza.setOpaque(false);
         contentPanel.add(chkMudanza);
+        
+        JPanel buttonPane = new JPanel();
+        buttonPane.setOpaque(false);
+        buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        fondomenu.add(buttonPane, BorderLayout.SOUTH);
+
+        {
+            okButton = new JButton("Publicar");
+            okButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    publicar();
+                }
+            });
+            okButton.setActionCommand("OK");
+            buttonPane.add(okButton);
+            getRootPane().setDefaultButton(okButton);
+        }
+        {
+            cancelButton = new JButton("Cancelar");
+            cancelButton.setActionCommand("Cancel");
+            cancelButton.addActionListener(e -> dispose());
+            buttonPane.add(cancelButton);
+        }
 	} 
 }	
 

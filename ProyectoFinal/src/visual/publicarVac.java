@@ -106,7 +106,7 @@ public class publicarVac extends JDialog {
             okButton = new JButton("Publicar");
             okButton.addActionListener(new ActionListener() {
                 public void actionPerformed(ActionEvent e) {
-                    publicar();
+                    publicr();
                 }
             });
             okButton.setActionCommand("OK");

@@ -155,6 +155,29 @@ public class publicarVac extends JDialog {
             JOptionPane.showMessageDialog(this, "Las plazas totales deben ser mayores que cero.", "Datos invalidos", JOptionPane.WARNING_MESSAGE);
             return;
         }
+        
+        
+        String perfil = cmbPerfil.getSelectedItem().toString();
+        Vacante vac = new Vacante(
+            "V-" + BolsaLaboral.generadorIdVac,
+            emp,
+            txtPuesto.getText().trim(),
+            txtDescripcion.getText().trim(),
+            salMin,
+            salMax,
+            txtProvincia.getText().trim(),
+            chkLicencia.isSelected(),
+            chkMudanza.isSelected(),
+            perfil,
+            coincidencia,
+            plazas
+        );
+        vac.setEstado("activa");
+        BolsaLaboral.getInstancia().publicarVacante(vac);
+        BolsaLaboral.generadorIdVac++;
+
+        JOptionPane.showMessageDialog(this, "Vacante publicada con exito", "Exito", JOptionPane.INFORMATION_MESSAGE);
+        dispose();
     }
 }	
 

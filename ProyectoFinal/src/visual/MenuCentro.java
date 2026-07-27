@@ -46,6 +46,14 @@ public class MenuCentro extends JFrame {
         mnVacantes.add(mntmPubvacante);
         
         JMenuItem mntmListVac = new JMenuItem("Lista de vacantes");
+        mntmListVac.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		ListVacan listvac = new ListVacan();
+				listvac.setModal(true);
+				listvac.setVisible(true);
+        	}
+        });
+        
         mnVacantes.add(mntmListVac);
         
         JMenu mnOpciones = new JMenu("Opciones");

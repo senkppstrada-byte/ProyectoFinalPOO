@@ -21,17 +21,6 @@ public class MenuCentro extends JFrame {
 
     private FondoMenu contentPane;
 
-    public static void main(String[] args) {
-        EventQueue.invokeLater(() -> {
-            try {
-                MenuCentro frame = new MenuCentro();
-                frame.setVisible(true);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-    }
-
     public MenuCentro() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 800, 500);

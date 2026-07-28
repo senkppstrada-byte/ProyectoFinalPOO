@@ -1,6 +1,8 @@
 package logica;
+import java.io.Serializable;
 
-public class Vacante {
+
+public class Vacante implements Serializable{
 
 	private String id;
 	private CentroEmpleador centro;

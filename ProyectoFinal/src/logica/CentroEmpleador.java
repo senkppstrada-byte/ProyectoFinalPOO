@@ -1,6 +1,7 @@
 package logica;
+import java.io.Serializable;
 
-public class CentroEmpleador {
+public class CentroEmpleador implements Serializable{
 	
 	private String id;
 	private String nombreComercial;

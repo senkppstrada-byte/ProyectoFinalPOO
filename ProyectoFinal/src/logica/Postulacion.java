@@ -1,8 +1,9 @@
 package logica;
 
 import java.time.LocalDate;
+import java.io.Serializable;
 
-public class Postulacion {
+public class Postulacion implements Serializable{
 
 	private String id;
 	private Candidato candidato;

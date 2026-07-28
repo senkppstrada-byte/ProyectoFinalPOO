@@ -1,6 +1,8 @@
 package logica;
+import java.io.Serializable;
 
-public abstract class Candidato {
+
+public abstract class Candidato implements Serializable {
 
 	protected String id;
 	protected String cedula;

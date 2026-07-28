@@ -1,6 +1,8 @@
 package logica;
 
-public class Representante {
+import java.io.Serializable;
+
+public class Representante implements Serializable{
 
 	
 	private String id;

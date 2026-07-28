@@ -1,8 +1,17 @@
 package logica;
 
 import java.util.ArrayList;
+import java.io.Serializable;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
+import java.io.IOException;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
+import java.io.File;
 
-public class BolsaLaboral {
+public class BolsaLaboral implements Serializable{
+	
+	private static final long serialVersionUID = 1L;
 	public static int generadorIdCuenta = 1;
 	public static int generadorIdCand = 1;
 	public static int generadorIdCent = 1;
@@ -21,8 +30,12 @@ public class BolsaLaboral {
 		}
 		return bolsa;
 	}
+	
+	public static void setInstancia(BolsaLaboral b) {
+		bolsa = b;
+	}
 
-	public BolsaLaboral() {
+	private BolsaLaboral() {
 		centros = new ArrayList<CentroEmpleador>();
 		candidatos = new ArrayList<Candidato>();
 		vacantes = new ArrayList<Vacante>();
@@ -231,4 +244,39 @@ public class BolsaLaboral {
 	    }
 	    return null;
 	}
+	
+	public void saveDatos() {
+	    
+	    try (FileOutputStream fos = new FileOutputStream("bolsa_laboral.dat");
+	         ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+	        
+	        oos.writeObject(this); 
+	        System.out.println("Datos guardados correctamente.");
+
+	    } catch (IOException e) {
+	        System.err.println("Error al guardar los datos: " + e.getMessage());
+	        e.printStackTrace();
+	    }
+	}
+	
+	public static void cargarDatos() {
+	    File archivo = new File("bolsa_laboral.dat");
+	    
+	    if (!archivo.exists()) {
+	        System.out.println("No se encontró archivo previo. Se iniciará una sesión limpia.");
+	        return;
+	    }
+
+	    try (FileInputStream fis = new FileInputStream(archivo);
+	         ObjectInputStream ois = new ObjectInputStream(fis)) {
+	        
+	        bolsa = (BolsaLaboral) ois.readObject();
+	        System.out.println("Datos cargados correctamente.");
+
+	    } catch (IOException | ClassNotFoundException e) {
+	        System.err.println("Error al cargar los datos: " + e.getMessage());
+	        e.printStackTrace();
+	    }
+	}
+	
 }

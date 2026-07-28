@@ -6,6 +6,9 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import logica.BolsaLaboral;
+
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import java.awt.Font;
@@ -21,6 +24,9 @@ public class DialogLogin extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
+		
+		BolsaLaboral.cargarDatos();
+		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -67,7 +73,7 @@ public class DialogLogin extends JFrame {
 		btnRegistrarse.setBounds(241, 104, 137, 49);
 		contentPane.add(btnRegistrarse);
 		
-		JLabel lblTitulo = new JLabel("Proyecto Bolsa de Empleo ");
+		JLabel lblTitulo = new JLabel("Proyecto Bolsa de Empleo");
 		lblTitulo.setFont(new Font("Times New Roman", Font.PLAIN, 25));
 		lblTitulo.setBounds(79, 13, 301, 49);
 		contentPane.add(lblTitulo);

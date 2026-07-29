@@ -188,4 +188,24 @@ public class SelCand extends JDialog {
         }
     }
     
+    public void seleccionar() {
+        if (listBot.isEmpty()) {
+            return;
+        }
+        int opcion = JOptionPane.showConfirmDialog(
+            SelCand.this,
+            "Estas seguro que deseas seleccionar a los candidatos elegidos?",
+            "Confirmar",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE
+        );
+        if (opcion == JOptionPane.YES_OPTION) {
+            for (Postulacion p : listBot) {
+                p.setEstado("seleccionada");
+                vacante.ocuparPlaza();
+            }
+            JOptionPane.showMessageDialog(SelCand.this, "Candidatos seleccionados con exito", "Exito", JOptionPane.INFORMATION_MESSAGE);
+            dispose();
+        }
+    }
 }

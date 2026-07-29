@@ -42,6 +42,8 @@ public class DialogLogin extends JFrame {
 	/**
 	 * Create the frame.
 	 */
+	
+	//TO DO: kpi menuAdmin
 	public DialogLogin() {
 		setTitle("Bienvenido");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -60,6 +62,8 @@ public class DialogLogin extends JFrame {
 		JButton btnIniciarSesion = new JButton("Iniciar sesion");
 		btnIniciarSesion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				Login login = new Login();
+				login.setVisible(true);
 			}
 		});
 		btnIniciarSesion.setBounds(55, 104, 137, 49);

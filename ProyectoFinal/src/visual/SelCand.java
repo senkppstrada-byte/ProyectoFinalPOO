@@ -53,7 +53,7 @@ public class SelCand extends JDialog {
         this.vacante = vac;
 
         setTitle("Seleccionar candidato");
-        setBounds(100, 100, 600, 350);
+        setBounds(100, 100, 781, 462);
         setLocationRelativeTo(null);
 
         fondomenu = new FondoMenu("/img/mant.png");

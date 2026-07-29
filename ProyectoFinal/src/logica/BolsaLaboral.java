@@ -31,7 +31,7 @@ public class BolsaLaboral implements Serializable{
 		return bolsa;
 	}
 	
-	public static void setInstancia(BolsaLaboral b) {
+	protected static void setInstancia(BolsaLaboral b) {
 		bolsa = b;
 	}
 
@@ -263,7 +263,7 @@ public class BolsaLaboral implements Serializable{
 	    File archivo = new File("bolsa_laboral.dat");
 	    
 	    if (!archivo.exists()) {
-	        System.out.println("No se encontró archivo previo. Se iniciará una sesión limpia.");
+	        System.out.println("No se encontro archivo existente. Se iniciará una sesion limpia.");
 	        return;
 	    }
 

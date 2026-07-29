@@ -140,4 +140,43 @@ public class SelCand extends JDialog {
             }
         });
         spSels.setViewportView(tblSels);
+        
+        JPanel buttonPane = new JPanel();
+        buttonPane.setOpaque(false);
+        buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        fondomenu.add(buttonPane, BorderLayout.SOUTH);
+
+        {
+            okButton = new JButton("Seleccionar");
+            okButton.setEnabled(false);
+            okButton.addActionListener(new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    seleccionar();
+                }
+            });
+            okButton.setActionCommand("OK");
+            buttonPane.add(okButton);
+            getRootPane().setDefaultButton(okButton);
+        }
+        {
+            cancelButton = new JButton("Cancelar");
+            cancelButton.setActionCommand("Cancel");
+            cancelButton.addActionListener(e -> dispose());
+            buttonPane.add(cancelButton);
+        }
+
+        loadtop();
+    }
+    
+    public void bajar() {
+        if (selectedt != null && listTop.contains(selectedt)) {
+            listBot.add(selectedt);
+            listTop.remove(selectedt);
+            selectedt = null;
+            btnbajar.setEnabled(false);
+            refrescar();
+        }
+    }
+    
+    
 }

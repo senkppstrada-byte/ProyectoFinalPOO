@@ -70,4 +70,18 @@ public class Login extends JFrame {
 
         getRootPane().setDefaultButton(btnLogin);
     }
+	
+    public static void main(String[] args) {
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    sembrarDatos();
+                    Login frame = new Login();
+                    frame.setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 }

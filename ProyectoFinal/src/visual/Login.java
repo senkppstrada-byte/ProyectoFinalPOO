@@ -84,4 +84,34 @@ public class Login extends JFrame {
             }
         });
     }
+    
+    public void ingresar() {
+        String usuario = txtUsuario.getText().trim();
+        String clave = new String(txtClave.getPassword()).trim();
+
+        if (usuario.isEmpty() || clave.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Debes ingresar usuario y clave.", "Datos incompletos", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        CuentaUsuario cuenta = buscarCuenta(usuario, clave);
+        if (cuenta == null) {
+            JOptionPane.showMessageDialog(this, "Usuario o clave incorrectos.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        BolsaLaboral.getInstancia().setCuentalog(cuenta);
+
+        if (cuenta.getRol().equalsIgnoreCase("candidato")) {
+            MenuCand menu = new MenuCand();
+            menu.setVisible(true);
+            dispose();
+        } else if (cuenta.getRol().equalsIgnoreCase("centro") || cuenta.getRol().equalsIgnoreCase("empleador")) {
+            MenuCentro menu = new MenuCentro();
+            menu.setVisible(true);
+            dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "El rol de la cuenta no es valido.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 }

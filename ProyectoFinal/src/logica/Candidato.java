@@ -3,7 +3,8 @@ import java.io.Serializable;
 
 
 public abstract class Candidato implements Serializable {
-
+	
+	private static final long serialVersionUID = 1L;
 	protected String id;
 	protected String cedula;
 	protected String nombreCompleto;
@@ -13,6 +14,7 @@ public abstract class Candidato implements Serializable {
 	protected boolean tieneLicencia;
 	protected boolean disponibleMudarse;
 	protected CuentaUsuario cuenta;
+	
 
 	public Candidato(String id, String cedula, String nombreCompleto, String genero, String provincia,
 			float aspiracionSalarial, boolean tieneLicencia, boolean disponibleMudarse, CuentaUsuario cuenta) {

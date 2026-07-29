@@ -1,9 +1,10 @@
 package logica;
+import java.io.Serializable;
 
-public class CuentaUsuario {
+public class CuentaUsuario implements Serializable{
 
 	
-
+	private static final long serialVersionUID = 1L;
 	private String id;
 	private String correo;
 	private String nombreUsuario;

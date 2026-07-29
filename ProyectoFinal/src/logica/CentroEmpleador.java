@@ -3,12 +3,14 @@ import java.io.Serializable;
 
 public class CentroEmpleador implements Serializable{
 	
+	private static final long serialVersionUID = 1L;
 	private String id;
 	private String nombreComercial;
 	private String tipoCentro;
 	private String direccion;
 	private float indDesemp;
 	private Representante rep;
+	
 	
 	public CentroEmpleador(String id, String nombreComercial, String tipoCentro, String direccion, float indDesemp,
 			Representante rep) {

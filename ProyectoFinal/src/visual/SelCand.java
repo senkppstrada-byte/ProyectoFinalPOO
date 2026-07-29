@@ -115,4 +115,29 @@ public class SelCand extends JDialog {
         });
         panelb.add(btnsubir);
 
+        panels = new JPanel();
+        panels.setOpaque(false);
+        contentPanel.add(panels, BorderLayout.SOUTH);
+        panels.setLayout(new BorderLayout(0, 0));
+
+        spSels = new JScrollPane();
+        panels.add(spSels, BorderLayout.CENTER);
+
+        String[] headerss = {"Codigo", "Nombre", "Provincia", "Perfil"};
+        models = new DefaultTableModel();
+        models.setColumnIdentifiers(headerss);
+
+        tblSels = new JTable();
+        tblSels.setModel(models);
+        tblSels.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int index = tblSels.getSelectedRow();
+                if (index >= 0 && index < listBot.size()) {
+                    btnsubir.setEnabled(true);
+                    selectedb = listBot.get(index);
+                }
+            }
+        });
+        spSels.setViewportView(tblSels);
 }

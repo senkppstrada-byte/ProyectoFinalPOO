@@ -1,7 +1,6 @@
 package visual;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -18,8 +17,6 @@ import logica.BolsaLaboral;
 import logica.Candidato;
 import logica.CentroEmpleador;
 import logica.CuentaUsuario;
-import logica.Representante;
-import logica.Tecnico;
 
 public class Login extends JFrame {
 
@@ -71,19 +68,6 @@ public class Login extends JFrame {
         getRootPane().setDefaultButton(btnLogin);
     }
 	
-    public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    sembrarDatos();
-                    Login frame = new Login();
-                    frame.setVisible(true);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
     
     public void ingresar() {
         String usuario = txtUsuario.getText().trim();

@@ -49,6 +49,47 @@ public class SelCand extends JDialog {
     private ArrayList<Postulacion> listTop = new ArrayList<Postulacion>();
     private ArrayList<Postulacion> listBot = new ArrayList<Postulacion>();
 
-    
+    public SelCand(Vacante vac) {
+        this.vacante = vac;
+
+        setTitle("Seleccionar candidato");
+        setBounds(100, 100, 600, 350);
+        setLocationRelativeTo(null);
+
+        fondomenu = new FondoMenu("/img/mant.png");
+        fondomenu.setLayout(new BorderLayout());
+        setContentPane(fondomenu);
+
+        contentPanel.setOpaque(false);
+        contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+        fondomenu.add(contentPanel, BorderLayout.CENTER);
+        contentPanel.setLayout(new BorderLayout(0, 0));
+
+        JPanel panelt = new JPanel();
+        panelt.setOpaque(false);
+        contentPanel.add(panelt, BorderLayout.NORTH);
+        panelt.setLayout(new BorderLayout(0, 0));
+
+        JScrollPane spTop = new JScrollPane();
+        panelt.add(spTop, BorderLayout.CENTER);
+
+        String[] headerst = {"Codigo", "Nombre", "Provincia", "Perfil"};
+        modelt = new DefaultTableModel();
+        modelt.setColumnIdentifiers(headerst);
+
+        tbltop = new JTable();
+        tbltop.setModel(modelt);
+        tbltop.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int index = tbltop.getSelectedRow();
+                if (index >= 0 && index < listTop.size()) {
+                    btnbajar.setEnabled(true);
+                    selectedt = listTop.get(index);
+                }
+            }
+        });
+
+        spTop.setViewportView(tbltop);
 
 }

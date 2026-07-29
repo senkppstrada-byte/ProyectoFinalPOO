@@ -178,5 +178,14 @@ public class SelCand extends JDialog {
         }
     }
     
+    public void subir() {
+        if (selectedb != null && listBot.contains(selectedb)) {
+            listTop.add(selectedb);
+            listBot.remove(selectedb);
+            selectedb = null;
+            btnsubir.setEnabled(false);
+            refrescar();
+        }
+    }
     
 }

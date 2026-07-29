@@ -91,5 +91,28 @@ public class SelCand extends JDialog {
         });
 
         spTop.setViewportView(tbltop);
+        
+        panelb = new JPanel();
+        panelb.setOpaque(false);
+        contentPanel.add(panelb, BorderLayout.CENTER);
+        panelb.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+
+        btnbajar = new JButton("Bajar");
+        btnbajar.setEnabled(false);
+        btnbajar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                bajar();
+            }
+        });
+        panelb.add(btnbajar);
+
+        btnsubir = new JButton("Subir");
+        btnsubir.setEnabled(false);
+        btnsubir.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                subir();
+            }
+        });
+        panelb.add(btnsubir);
 
 }

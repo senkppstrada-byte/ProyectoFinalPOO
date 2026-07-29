@@ -73,7 +73,7 @@ public class SelCand extends JDialog {
         JScrollPane spTop = new JScrollPane();
         panelt.add(spTop, BorderLayout.CENTER);
 
-        String[] headerst = {"Codigo", "Nombre", "Provincia", "Perfil"};
+        String[] headerst = {"Codigo", "Nombre", "Provincia", "Perfil", "Match"};
         modelt = new DefaultTableModel();
         modelt.setColumnIdentifiers(headerst);
 
@@ -123,7 +123,7 @@ public class SelCand extends JDialog {
         spSels = new JScrollPane();
         panels.add(spSels, BorderLayout.CENTER);
 
-        String[] headerss = {"Codigo", "Nombre", "Provincia", "Perfil"};
+        String[] headerss = {"Codigo", "Nombre", "Provincia", "Perfil", "Match"};
         models = new DefaultTableModel();
         models.setColumnIdentifiers(headerss);
 
@@ -250,5 +250,6 @@ public class SelCand extends JDialog {
         } else {
             fila[3] = "";
         }
+        fila[4] = String.format("%.1f%%", p.getPorCoincidencia());
     }
 }

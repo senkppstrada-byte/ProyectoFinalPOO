@@ -21,100 +21,107 @@ import logica.CuentaUsuario;
 public class Login extends JFrame {
 
 	private JPanel contentPane;
+	private FondoMenu fondomenu;
 	private JTextField txtUsuario;
 	private JPasswordField txtClave;
 	
 	public Login() {
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setTitle("Bolsa de Trabajo - Ingreso");
-        setBounds(100, 100, 450, 300);
-        setLocationRelativeTo(null);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setTitle("Bolsa de Trabajo - Ingreso");
+		setBounds(100, 100, 450, 300);
+		setLocationRelativeTo(null);
 
-        contentPane = new JPanel();
-        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-        contentPane.setLayout(new BorderLayout(0, 0));
-        setContentPane(contentPane);
+		fondomenu = new FondoMenu("/img/mant.png");
+		fondomenu.setLayout(new BorderLayout());
+		setContentPane(fondomenu);
 
-        JPanel panel = new JPanel();
-        contentPane.add(panel, BorderLayout.CENTER);
-        panel.setLayout(null);
+		contentPane = new JPanel();
+		contentPane.setOpaque(false);
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		contentPane.setLayout(new BorderLayout(0, 0));
+		fondomenu.add(contentPane, BorderLayout.CENTER);
 
-        JLabel lblUsuario = new JLabel("Usuario:");
-        lblUsuario.setBounds(39, 39, 105, 14);
-        panel.add(lblUsuario);
+		JPanel panel = new JPanel();
+		panel.setOpaque(false);
+		contentPane.add(panel, BorderLayout.CENTER);
+		panel.setLayout(null);
 
-        txtUsuario = new JTextField();
-        txtUsuario.setBounds(39, 64, 191, 20);
-        panel.add(txtUsuario);
-        txtUsuario.setColumns(10);
+		JLabel lblUsuario = new JLabel("Usuario:");
+		lblUsuario.setBounds(39, 39, 105, 14);
+		panel.add(lblUsuario);
 
-        JLabel lblClave = new JLabel("Clave:");
-        lblClave.setBounds(39, 98, 105, 14);
-        panel.add(lblClave);
+		txtUsuario = new JTextField();
+		txtUsuario.setBounds(39, 64, 191, 20);
+		panel.add(txtUsuario);
+		txtUsuario.setColumns(10);
 
-        txtClave = new JPasswordField();
-        txtClave.setBounds(39, 128, 191, 20);
-        panel.add(txtClave);
+		JLabel lblClave = new JLabel("Clave:");
+		lblClave.setBounds(39, 98, 105, 14);
+		panel.add(lblClave);
 
-        JButton btnLogin = new JButton("Ingresar");
-        btnLogin.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                ingresar();
-            }
-        });
-        btnLogin.setBounds(39, 175, 105, 23);
-        panel.add(btnLogin);
+		txtClave = new JPasswordField();
+		txtClave.setBounds(39, 128, 191, 20);
+		panel.add(txtClave);
 
-        getRootPane().setDefaultButton(btnLogin);
-    }
+		JButton btnLogin = new JButton("Ingresar");
+		btnLogin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ingresar();
+			}
+		});
+		btnLogin.setBounds(39, 175, 105, 23);
+		panel.add(btnLogin);
+
+		getRootPane().setDefaultButton(btnLogin);
+	}
 	
-    
-    public void ingresar() {
-        String usuario = txtUsuario.getText().trim();
-        String clave = new String(txtClave.getPassword()).trim();
+	
+	public void ingresar() {
+		String usuario = txtUsuario.getText().trim();
+		String clave = new String(txtClave.getPassword()).trim();
 
-        if (usuario.isEmpty() || clave.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Debes ingresar usuario y clave.", "Datos incompletos", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+		if (usuario.isEmpty() || clave.isEmpty()) {
+			JOptionPane.showMessageDialog(this, "Debes ingresar usuario y clave.", "Datos incompletos", JOptionPane.WARNING_MESSAGE);
+			return;
+		}
 
-        CuentaUsuario cuenta = buscarCuenta(usuario, clave);
-        if (cuenta == null) {
-            JOptionPane.showMessageDialog(this, "Usuario o clave incorrectos.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+		CuentaUsuario cuenta = buscarCuenta(usuario, clave);
+		if (cuenta == null) {
+			JOptionPane.showMessageDialog(this, "Usuario o clave incorrectos.", "Error", JOptionPane.ERROR_MESSAGE);
+			return;
+		}
 
-        BolsaLaboral.getInstancia().setCuentalog(cuenta);
+		BolsaLaboral.getInstancia().setCuentalog(cuenta);
 
-        if (cuenta.getRol().equalsIgnoreCase("candidato")) {
-            MenuCand menu = new MenuCand();
-            menu.setVisible(true);
-            dispose();
-        } else if (cuenta.getRol().equalsIgnoreCase("centro") || cuenta.getRol().equalsIgnoreCase("empleador")) {
-            MenuCentro menu = new MenuCentro();
-            menu.setVisible(true);
-            dispose();
-        } else {
-            JOptionPane.showMessageDialog(this, "El rol de la cuenta no es valido.", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-    
-    public CuentaUsuario buscarCuenta(String usuario, String clave) {
-        BolsaLaboral bolsa = BolsaLaboral.getInstancia();
-        for (Candidato c : bolsa.getCandidatos()) {
-            CuentaUsuario cu = c.getCuenta();
-            if (cu != null && cu.getNombreUsuario().equals(usuario) && cu.getClave().equals(clave)) {
-                return cu;
-            }
-        }
-        for (CentroEmpleador ce : bolsa.getCentros()) {
-            if (ce.getRep() != null) {
-                CuentaUsuario cu = ce.getRep().getCuenta();
-                if (cu != null && cu.getNombreUsuario().equals(usuario) && cu.getClave().equals(clave)) {
-                    return cu;
-                }
-            }
-        }
-        return null;
-    }
+		if (cuenta.getRol().equalsIgnoreCase("candidato")) {
+			MenuCand menu = new MenuCand();
+			menu.setVisible(true);
+			dispose();
+		} else if (cuenta.getRol().equalsIgnoreCase("centro") || cuenta.getRol().equalsIgnoreCase("empleador")) {
+			MenuCentro menu = new MenuCentro();
+			menu.setVisible(true);
+			dispose();
+		} else {
+			JOptionPane.showMessageDialog(this, "El rol de la cuenta no es valido.", "Error", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+	
+	public CuentaUsuario buscarCuenta(String usuario, String clave) {
+		BolsaLaboral bolsa = BolsaLaboral.getInstancia();
+		for (Candidato c : bolsa.getCandidatos()) {
+			CuentaUsuario cu = c.getCuenta();
+			if (cu != null && cu.getNombreUsuario().equals(usuario) && cu.getClave().equals(clave)) {
+				return cu;
+			}
+		}
+		for (CentroEmpleador ce : bolsa.getCentros()) {
+			if (ce.getRep() != null) {
+				CuentaUsuario cu = ce.getRep().getCuenta();
+				if (cu != null && cu.getNombreUsuario().equals(usuario) && cu.getClave().equals(clave)) {
+					return cu;
+				}
+			}
+		}
+		return null;
+	}
 }

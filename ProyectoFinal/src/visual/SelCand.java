@@ -218,4 +218,37 @@ public class SelCand extends JDialog {
         }
         refrescar();
     }
+    
+    public void refrescar() {
+        modelt.setRowCount(0);
+        rowt = new Object[modelt.getColumnCount()];
+        for (Postulacion p : listTop) {
+            llenarFila(rowt, p);
+            modelt.addRow(rowt);
+        }
+
+        models.setRowCount(0);
+        rows = new Object[models.getColumnCount()];
+        for (Postulacion p : listBot) {
+            llenarFila(rows, p);
+            models.addRow(rows);
+        }
+
+        okButton.setEnabled(!listBot.isEmpty());
+    }
+
+    public void llenarFila(Object[] fila, Postulacion p) {
+        fila[0] = p.getId();
+        fila[1] = p.getCandidato().getNombreCompleto();
+        fila[2] = p.getCandidato().getProvincia();
+        if (p.getCandidato() instanceof Tecnico) {
+            fila[3] = "Tecnico";
+        } else if (p.getCandidato() instanceof Profesional) {
+            fila[3] = "Profesional";
+        } else if (p.getCandidato() instanceof Obrero) {
+            fila[3] = "Obrero";
+        } else {
+            fila[3] = "";
+        }
+    }
 }

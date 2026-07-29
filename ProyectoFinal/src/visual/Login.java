@@ -114,4 +114,23 @@ public class Login extends JFrame {
             JOptionPane.showMessageDialog(this, "El rol de la cuenta no es valido.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+    
+    public CuentaUsuario buscarCuenta(String usuario, String clave) {
+        BolsaLaboral bolsa = BolsaLaboral.getInstancia();
+        for (Candidato c : bolsa.getCandidatos()) {
+            CuentaUsuario cu = c.getCuenta();
+            if (cu != null && cu.getNombreUsuario().equals(usuario) && cu.getClave().equals(clave)) {
+                return cu;
+            }
+        }
+        for (CentroEmpleador ce : bolsa.getCentros()) {
+            if (ce.getRep() != null) {
+                CuentaUsuario cu = ce.getRep().getCuenta();
+                if (cu != null && cu.getNombreUsuario().equals(usuario) && cu.getClave().equals(clave)) {
+                    return cu;
+                }
+            }
+        }
+        return null;
+    }
 }

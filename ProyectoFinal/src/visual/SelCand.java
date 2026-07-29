@@ -208,4 +208,14 @@ public class SelCand extends JDialog {
             dispose();
         }
     }
+    
+    public void loadtop() {
+        listTop.clear();
+        listBot.clear();
+        ArrayList<Postulacion> posts = BolsaLaboral.getInstancia().conectarCandidatos(vacante);
+        for (Postulacion p : posts) {
+            listTop.add(p);
+        }
+        refrescar();
+    }
 }

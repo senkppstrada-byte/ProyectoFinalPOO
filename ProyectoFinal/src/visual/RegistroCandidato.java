@@ -144,6 +144,67 @@ public class RegistroCandidato extends JDialog {
 	}
 
 	public void registrar() {
+		String usuario = txtUsuario.getText().trim();
+		String clave = new String(txtClave.getPassword()).trim();
+		String correo = txtCorreo.getText().trim();
+		String nombre = txtNombre.getText().trim();
+		String cedula = txtCedula.getText().trim();
+		String genero = (String) cmbGenero.getSelectedItem();
+		String provincia = txtProvincia.getText().trim();
+		String perfil = (String) cmbPerfil.getSelectedItem();
+
+		if (usuario.isEmpty() || clave.isEmpty() || correo.isEmpty() || nombre.isEmpty() || cedula.isEmpty()
+				|| provincia.isEmpty()) {
+			JOptionPane.showMessageDialog(this, "Completa todos los campos obligatorios.", "Faltan datos",
+					JOptionPane.WARNING_MESSAGE);
+			return;
+		}
+		if (usuarioExiste(usuario)) {
+			JOptionPane.showMessageDialog(this, "Ese nombre de usuario ya existe.", "Usuario ocupado",
+					JOptionPane.WARNING_MESSAGE);
+			return;
+		}
+
+		BolsaLaboral bolsa = BolsaLaboral.getInstancia();
+		float aspiracion = ((Number) spnAspiracion.getValue()).floatValue();
+		boolean licencia = chkLicencia.isSelected();
+		boolean mudanza = chkMudanza.isSelected();
+
+		CuentaUsuario cuenta = new CuentaUsuario("CU-" + BolsaLaboral.generadorIdCuenta, correo, usuario, clave,
+				"candidato");
+		BolsaLaboral.generadorIdCuenta++;
+
+		String idCand = "CAN-" + BolsaLaboral.generadorIdCand;
+		Candidato candidato;
+		if (perfil.equalsIgnoreCase("Tecnico")) {
+			String area = txtArea.getText().trim();
+			int experiencia = ((Number) spnExperiencia.getValue()).intValue();
+			candidato = new Tecnico(idCand, cedula, nombre, genero, provincia, aspiracion, licencia, mudanza, cuenta,
+					area, experiencia);
+		} else if (perfil.equalsIgnoreCase("Profesional")) {
+			String titulo = txtTitulo.getText().trim();
+			candidato = new Profesional(idCand, cedula, nombre, genero, provincia, aspiracion, licencia, mudanza, cuenta,
+					titulo);
+		} else {
+			ArrayList<String> destrezas = new ArrayList<String>();
+			String texto = txtDestrezas.getText().trim();
+			if (!texto.isEmpty()) {
+				String[] partes = texto.split(",");
+				for (String p : partes) {
+					destrezas.add(p.trim());
+				}
+			}
+			candidato = new Obrero(idCand, cedula, nombre, genero, provincia, aspiracion, licencia, mudanza, cuenta,
+					destrezas);
+		}
+
+		bolsa.registrarCandidato(candidato);
+		BolsaLaboral.generadorIdCand++;
+		bolsa.saveDatos();
+
+		JOptionPane.showMessageDialog(this, "Candidato registrado. Ya puedes iniciar sesion.", "Listo",
+				JOptionPane.INFORMATION_MESSAGE);
+		dispose();
 	}
 
 	private boolean usuarioExiste(String usuario) {

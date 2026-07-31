@@ -101,6 +101,44 @@ public class RegistroCentro extends JDialog {
 		form.add(txtDireccion);
 	}
 	public void registrar() {
+		String usuario = txtUsuario.getText().trim();
+		String clave = new String(txtClave.getPassword()).trim();
+		String correo = txtCorreo.getText().trim();
+		String repNombre = txtRepNombre.getText().trim();
+		String repCedula = txtRepCedula.getText().trim();
+		String nombreComercial = txtNombreComercial.getText().trim();
+		String tipoCentro = txtTipoCentro.getText().trim();
+		String direccion = txtDireccion.getText().trim();
+
+		if (usuario.isEmpty() || clave.isEmpty() || correo.isEmpty() || repNombre.isEmpty() || repCedula.isEmpty()
+				|| nombreComercial.isEmpty()) {
+			JOptionPane.showMessageDialog(this, "Completa todos los campos obligatorios.", "Faltan datos",
+					JOptionPane.WARNING_MESSAGE);
+			return;
+		}
+		if (usuarioExiste(usuario)) {
+			JOptionPane.showMessageDialog(this, "Ese nombre de usuario ya existe.", "Usuario ocupado",
+					JOptionPane.WARNING_MESSAGE);
+			return;
+		}
+
+		BolsaLaboral bolsa = BolsaLaboral.getInstancia();
+
+		CuentaUsuario cuenta = new CuentaUsuario("CU-" + BolsaLaboral.generadorIdCuenta, correo, usuario, clave,
+				"centro");
+		BolsaLaboral.generadorIdCuenta++;
+
+		Representante rep = new Representante("REP-" + BolsaLaboral.generadorIdCent, repCedula, repNombre, cuenta);
+		CentroEmpleador centro = new CentroEmpleador("CE-" + BolsaLaboral.generadorIdCent, nombreComercial, tipoCentro,
+				direccion, 0, rep);
+
+		bolsa.registrarCentro(centro);
+		BolsaLaboral.generadorIdCent++;
+		bolsa.saveDatos();
+
+		JOptionPane.showMessageDialog(this, "Centro registrado. Ya puedes iniciar sesion.", "Listo",
+				JOptionPane.INFORMATION_MESSAGE);
+		dispose();
 	}
 
 	private boolean usuarioExiste(String usuario) {

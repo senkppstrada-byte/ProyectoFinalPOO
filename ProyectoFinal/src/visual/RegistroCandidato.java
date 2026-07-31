@@ -82,6 +82,65 @@ public class RegistroCandidato extends JDialog {
 	}
 
 	private void construirFormulario(JPanel form) {
+		form.add(new JLabel("Usuario:"));
+		txtUsuario = new JTextField();
+		form.add(txtUsuario);
+
+		form.add(new JLabel("Clave:"));
+		txtClave = new JPasswordField();
+		form.add(txtClave);
+
+		form.add(new JLabel("Correo:"));
+		txtCorreo = new JTextField();
+		form.add(txtCorreo);
+
+		form.add(new JLabel("Nombre completo:"));
+		txtNombre = new JTextField();
+		form.add(txtNombre);
+
+		form.add(new JLabel("Cedula:"));
+		txtCedula = new JTextField();
+		form.add(txtCedula);
+
+		form.add(new JLabel("Genero:"));
+		cmbGenero = new JComboBox<String>(new String[] { "M", "F" });
+		form.add(cmbGenero);
+
+		form.add(new JLabel("Provincia:"));
+		txtProvincia = new JTextField();
+		form.add(txtProvincia);
+
+		form.add(new JLabel("Aspiracion salarial:"));
+		spnAspiracion = new JSpinner(new SpinnerNumberModel(15000.0, 0.0, 1000000.0, 500.0));
+		form.add(spnAspiracion);
+
+		form.add(new JLabel("Licencia de conducir:"));
+		chkLicencia = new JCheckBox();
+		form.add(chkLicencia);
+
+		form.add(new JLabel("Disponible a mudarse:"));
+		chkMudanza = new JCheckBox();
+		form.add(chkMudanza);
+
+		form.add(new JLabel("Perfil:"));
+		cmbPerfil = new JComboBox<String>(new String[] { "Tecnico", "Profesional", "Obrero" });
+		form.add(cmbPerfil);
+
+		form.add(new JLabel("Area (Tecnico):"));
+		txtArea = new JTextField();
+		form.add(txtArea);
+
+		form.add(new JLabel("Anios experiencia (Tecnico):"));
+		spnExperiencia = new JSpinner(new SpinnerNumberModel(0, 0, 60, 1));
+		form.add(spnExperiencia);
+
+		form.add(new JLabel("Titulo (Profesional):"));
+		txtTitulo = new JTextField();
+		form.add(txtTitulo);
+
+		form.add(new JLabel("Destrezas (Obrero, separadas por coma):"));
+		txtDestrezas = new JTextField();
+		form.add(txtDestrezas);
 	}
 
 	public void registrar() {

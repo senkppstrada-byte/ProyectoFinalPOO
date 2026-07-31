@@ -208,6 +208,18 @@ public class RegistroCandidato extends JDialog {
 	}
 
 	private boolean usuarioExiste(String usuario) {
+		BolsaLaboral bolsa = BolsaLaboral.getInstancia();
+		for (Candidato c : bolsa.getCandidatos()) {
+			if (c.getCuenta() != null && c.getCuenta().getNombreUsuario().equalsIgnoreCase(usuario)) {
+				return true;
+			}
+		}
+		for (CentroEmpleador ce : bolsa.getCentros()) {
+			if (ce.getRep() != null && ce.getRep().getCuenta() != null
+					&& ce.getRep().getCuenta().getNombreUsuario().equalsIgnoreCase(usuario)) {
+				return true;
+			}
+		}
 		return false;
 	}
 }

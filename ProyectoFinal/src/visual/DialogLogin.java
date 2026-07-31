@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane; 
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
@@ -69,9 +70,21 @@ public class DialogLogin extends JFrame {
 		btnIniciarSesion.setBounds(55, 104, 137, 49);
 		contentPane.add(btnIniciarSesion);
 		
-		JButton btnRegistrarse = new JButton("Registrarse");
+        JButton btnRegistrarse = new JButton("Registrarse");
 		btnRegistrarse.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				Object[] opciones = { "Candidato", "Centro" };
+				int tipo = JOptionPane.showOptionDialog(DialogLogin.this, "Que deseas registrar?", "Registro",
+						JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[0]);
+				if (tipo == 0) {
+					RegistroCandidato reg = new RegistroCandidato();
+					reg.setModal(true);
+					reg.setVisible(true);
+				} else if (tipo == 1) {
+					RegistroCentro reg = new RegistroCentro();
+					reg.setModal(true);
+					reg.setVisible(true);
+				}
 			}
 		});
 		btnRegistrarse.setBounds(241, 104, 137, 49);

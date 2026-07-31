@@ -68,8 +68,38 @@ public class RegistroCentro extends JDialog {
 	}
 
 	private void construirFormulario(JPanel form) {
-	}
+		form.add(new JLabel("Usuario:"));
+		txtUsuario = new JTextField();
+		form.add(txtUsuario);
 
+		form.add(new JLabel("Clave:"));
+		txtClave = new JPasswordField();
+		form.add(txtClave);
+
+		form.add(new JLabel("Correo:"));
+		txtCorreo = new JTextField();
+		form.add(txtCorreo);
+
+		form.add(new JLabel("Nombre del representante:"));
+		txtRepNombre = new JTextField();
+		form.add(txtRepNombre);
+
+		form.add(new JLabel("Cedula del representante:"));
+		txtRepCedula = new JTextField();
+		form.add(txtRepCedula);
+
+		form.add(new JLabel("Nombre comercial:"));
+		txtNombreComercial = new JTextField();
+		form.add(txtNombreComercial);
+
+		form.add(new JLabel("Tipo de centro:"));
+		txtTipoCentro = new JTextField();
+		form.add(txtTipoCentro);
+
+		form.add(new JLabel("Direccion:"));
+		txtDireccion = new JTextField();
+		form.add(txtDireccion);
+	}
 	public void registrar() {
 	}
 

@@ -1,12 +1,16 @@
 package visual;
 
 import java.awt.BorderLayout;
+
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.time.LocalDate;
+import java.util.Collections;
+import java.util.Comparator;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -24,6 +28,7 @@ import logica.Postulacion;
 import logica.Profesional;
 import logica.Tecnico;
 import logica.Vacante;
+import logica.Candidato;
 
 public class SelCand extends JDialog {
 

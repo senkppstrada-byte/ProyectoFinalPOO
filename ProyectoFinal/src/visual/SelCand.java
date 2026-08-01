@@ -38,8 +38,8 @@ public class SelCand extends JDialog {
     private Object[] rowt;
     private DefaultTableModel models;
     private Object[] rows;
-    private Postulacion selectedt = null;
-    private Postulacion selectedb = null;
+    private Candidato selectedt = null;
+    private Candidato selectedb = null;
     private JTable tbltop;
     private JButton okButton;
     private JButton cancelButton;
@@ -51,8 +51,8 @@ public class SelCand extends JDialog {
     private JButton btnbajar;
     private JButton btnsubir;
     private JTable tblSels;
-    private ArrayList<Postulacion> listTop = new ArrayList<Postulacion>();
-    private ArrayList<Postulacion> listBot = new ArrayList<Postulacion>();
+    private ArrayList<Candidato> listTop = new ArrayList<Candidato>();
+    private ArrayList<Candidato> listBot = new ArrayList<Candidato>();
 
     public SelCand(Vacante vac) {
         this.vacante = vac;

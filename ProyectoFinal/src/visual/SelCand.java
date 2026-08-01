@@ -205,10 +205,18 @@ public class SelCand extends JDialog {
             JOptionPane.QUESTION_MESSAGE
         );
         if (opcion == JOptionPane.YES_OPTION) {
-            for (Postulacion p : listBot) {
-                p.setEstado("seleccionada");
+            BolsaLaboral bolsa = BolsaLaboral.getInstancia();
+            for (Candidato c : listBot) {
+                if (!vacante.hayPlazasDisponibles()) {
+                    break;
+                }
+                float match = bolsa.calcMatch(vacante, c);
+                Postulacion p = new Postulacion("P-" + BolsaLaboral.generadorIdPos, c, vacante, LocalDate.now(), match, "seleccionada");
+                bolsa.publicarPostulacion(p);
+                BolsaLaboral.generadorIdPos++;
                 vacante.ocuparPlaza();
             }
+            bolsa.saveDatos();
             JOptionPane.showMessageDialog(SelCand.this, "Candidatos seleccionados con exito", "Exito", JOptionPane.INFORMATION_MESSAGE);
             dispose();
         }

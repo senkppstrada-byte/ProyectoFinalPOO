@@ -33,7 +33,7 @@ public class ListPos extends JDialog {
     private Candidato cand = BolsaLaboral.getInstancia().buscarCandidatoPorCuenta(BolsaLaboral.getInstancia().getCuentalog());
 
     public ListPos() {
-        setTitle("Lista de postulaciones");
+        setTitle("Mis Postulaciones");
         setBounds(100, 100, 650, 350); 
         setLocationRelativeTo(null);
         
@@ -79,36 +79,8 @@ public class ListPos extends JDialog {
         fondomenu.add(buttonPane, BorderLayout.SOUTH);
 
         {
-            okButton = new JButton("Cambiar Estado");
-            okButton.setEnabled(false);            
-            okButton.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    if (selected != null && cand != null) {
-                        
-                        String nuevoEstado = selected.getEstado().equalsIgnoreCase("activa") ? "inactiva" : "activa";
-                        
-                        int opcion = JOptionPane.showConfirmDialog(
-                            ListPos.this, 
-                            "Estas seguro que deseas cambiar el estado de la postulacion?",  
-                            "Confirmar", 
-                            JOptionPane.YES_NO_OPTION, 
-                            JOptionPane.QUESTION_MESSAGE
-                        );
-                        
-                        if (opcion == JOptionPane.YES_OPTION) {
-                            selected.setEstado(nuevoEstado);
-                            
-                            JOptionPane.showMessageDialog(ListPos.this, "Cambio realizado con exito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                            
-                            loadPostulaciones();
-                            okButton.setEnabled(false);
-                            selected = null;
-                        }
-                    } else if (cand == null) {
-                        JOptionPane.showMessageDialog(ListPos.this, "Error: No se encontró la información del candidato logueado.", "Error", JOptionPane.ERROR_MESSAGE);
-                    }
-                }
-            });
+            okButton = new JButton("Cerrar");
+            okButton.addActionListener(e -> dispose());
             okButton.setActionCommand("OK");
             buttonPane.add(okButton);
             getRootPane().setDefaultButton(okButton);

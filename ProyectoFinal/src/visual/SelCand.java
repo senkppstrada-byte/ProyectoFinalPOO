@@ -271,19 +271,19 @@ public class SelCand extends JDialog {
         okButton.setEnabled(!listBot.isEmpty());
     }
 
-    public void llenarFila(Object[] fila, Postulacion p) {
-        fila[0] = p.getId();
-        fila[1] = p.getCandidato().getNombreCompleto();
-        fila[2] = p.getCandidato().getProvincia();
-        if (p.getCandidato() instanceof Tecnico) {
+    public void llenarFila(Object[] fila, Candidato c) {
+        fila[0] = c.getId();
+        fila[1] = c.getNombreCompleto();
+        fila[2] = c.getProvincia();
+        if (c instanceof Tecnico) {
             fila[3] = "Tecnico";
-        } else if (p.getCandidato() instanceof Profesional) {
+        } else if (c instanceof Profesional) {
             fila[3] = "Profesional";
-        } else if (p.getCandidato() instanceof Obrero) {
+        } else if (c instanceof Obrero) {
             fila[3] = "Obrero";
         } else {
             fila[3] = "";
         }
-        fila[4] = String.format("%.1f%%", p.getPorCoincidencia());
+        fila[4] = String.format("%.1f%%", BolsaLaboral.getInstancia().calcMatch(vacante, c));
     }
 }

@@ -256,15 +256,15 @@ public class SelCand extends JDialog {
     public void refrescar() {
         modelt.setRowCount(0);
         rowt = new Object[modelt.getColumnCount()];
-        for (Postulacion p : listTop) {
-            llenarFila(rowt, p);
+        for (Candidato c : listTop) {
+            llenarFila(rowt, c);
             modelt.addRow(rowt);
         }
 
         models.setRowCount(0);
         rows = new Object[models.getColumnCount()];
-        for (Postulacion p : listBot) {
-            llenarFila(rows, p);
+        for (Candidato c : listBot) {
+            llenarFila(rows, c);
             models.addRow(rows);
         }
 

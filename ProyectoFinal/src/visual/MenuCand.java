@@ -31,29 +31,29 @@ public class MenuCand extends JFrame {
         menuBar.setBackground(Color.LIGHT_GRAY);
         setJMenuBar(menuBar);
         
-        JMenu mnPostulaciones = new JMenu("Postulaciones");
-        mnPostulaciones.setBackground(Color.LIGHT_GRAY);
-        menuBar.add(mnPostulaciones);
-        
-        JMenuItem mntmPostaVac = new JMenuItem("Postularse a vacante");
-        mntmPostaVac.addActionListener(new ActionListener() {
+        JMenu mnVacantes = new JMenu("Vacantes");
+        mnVacantes.setBackground(Color.LIGHT_GRAY);
+        menuBar.add(mnVacantes);
+
+        JMenuItem mntmVerVacantes = new JMenuItem("Ver vacantes disponibles");
+        mntmVerVacantes.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		PostaVac postavac = new PostaVac();
-				postavac.setModal(true);
-				postavac.setVisible(true);
+        		VerVacantes vervac = new VerVacantes();
+				vervac.setModal(true);
+				vervac.setVisible(true);
         	}
         });
-        mnPostulaciones.add(mntmPostaVac);
-        
-        JMenuItem mntmListPos = new JMenuItem("Lista de Postulaciones");
-        mntmListPos.addActionListener(new ActionListener() {
+        mnVacantes.add(mntmVerVacantes);
+
+        JMenuItem mntmMisContrat = new JMenuItem("Mis contrataciones");
+        mntmMisContrat.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
         		ListPos listpos = new ListPos();
 				listpos.setModal(true);
 				listpos.setVisible(true);
         	}
         });
-        mnPostulaciones.add(mntmListPos);
+        mnVacantes.add(mntmMisContrat);
         
         JMenu mnOpciones = new JMenu("Opciones");
         mnOpciones.setBackground(Color.LIGHT_GRAY);

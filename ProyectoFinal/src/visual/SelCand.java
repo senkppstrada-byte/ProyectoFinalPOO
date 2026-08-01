@@ -234,6 +234,17 @@ public class SelCand extends JDialog {
         refrescar();
     }
     
+    private boolean estaDisponible(Candidato c) {
+        BolsaLaboral bolsa = BolsaLaboral.getInstancia();
+        for (Postulacion p : bolsa.getPostulaciones()) {
+            if (p.getCandidato() != null && p.getCandidato().getId().equals(c.getId())
+                    && p.getEstado().equalsIgnoreCase("seleccionada")) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
     public void refrescar() {
         modelt.setRowCount(0);
         rowt = new Object[modelt.getColumnCount()];

@@ -217,10 +217,20 @@ public class SelCand extends JDialog {
     public void loadtop() {
         listTop.clear();
         listBot.clear();
-        ArrayList<Postulacion> posts = BolsaLaboral.getInstancia().conectarCandidatos(vacante);
-        for (Postulacion p : posts) {
-            listTop.add(p);
+        final BolsaLaboral bolsa = BolsaLaboral.getInstancia();
+        for (Candidato c : bolsa.getCandidatos()) {
+            if (estaDisponible(c)) {
+                float match = bolsa.calcMatch(vacante, c);
+                if (match >= vacante.getCoincidenciaMinima()) {
+                    listTop.add(c);
+                }
+            }
         }
+        Collections.sort(listTop, new Comparator<Candidato>() {
+            public int compare(Candidato a, Candidato b) {
+                return Float.compare(bolsa.calcMatch(vacante, b), bolsa.calcMatch(vacante, a));
+            }
+        });
         refrescar();
     }
     

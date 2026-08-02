@@ -1,9 +1,11 @@
 package visual;
 
 import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -11,7 +13,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
+import javax.swing.SwingConstants;
 
 import logica.BolsaLaboral;
 import logica.Candidato;
@@ -20,108 +22,73 @@ import logica.CuentaUsuario;
 
 public class Login extends JFrame {
 
-	private JPanel contentPane;
-	private FondoMenu fondomenu;
-	private JTextField txtUsuario;
-	private JPasswordField txtClave;
-	
-	public Login() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setTitle("Bolsa de Trabajo - Ingreso");
-		setBounds(100, 100, 450, 300);
-		setLocationRelativeTo(null);
+    private JTextField txtUsuario;
+    private JPasswordField txtClave;
 
-		fondomenu = new FondoMenu("/img/mant.png");
-		fondomenu.setLayout(new BorderLayout());
-		setContentPane(fondomenu);
+    public Login() {
+        setTitle("Iniciar sesión");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(420, 320);
+        setLocationRelativeTo(null);
 
-		contentPane = new JPanel();
-		contentPane.setOpaque(false);
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout(0, 0));
-		fondomenu.add(contentPane, BorderLayout.CENTER);
+        JPanel panel = new JPanel(new BorderLayout(0, 20));
+        panel.setBackground(Tema.FONDO);
+        panel.setBorder(BorderFactory.createEmptyBorder(28, 40, 24, 40));
+        setContentPane(panel);
 
-		JPanel panel = new JPanel();
-		panel.setOpaque(false);
-		contentPane.add(panel, BorderLayout.CENTER);
-		panel.setLayout(null);
+        JLabel titulo = new JLabel("Iniciar sesión", SwingConstants.CENTER);
+        titulo.setFont(Tema.TITULO);
+        titulo.setForeground(Tema.TEXTO);
+        panel.add(titulo, BorderLayout.NORTH);
 
-		JLabel lblUsuario = new JLabel("Usuario:");
-		lblUsuario.setBounds(39, 39, 105, 14);
-		panel.add(lblUsuario);
+        JPanel form = new JPanel(new GridLayout(0, 1, 0, 6));
+        form.setBackground(Tema.FONDO);
 
-		txtUsuario = new JTextField();
-		txtUsuario.setBounds(39, 64, 191, 20);
-		panel.add(txtUsuario);
-		txtUsuario.setColumns(10);
+        JLabel lblUsuario = new JLabel("Usuario");
+        lblUsuario.setFont(Tema.NORMAL);
+        lblUsuario.setForeground(Tema.TEXTO_SUAVE);
+        txtUsuario = new JTextField();
 
-		JLabel lblClave = new JLabel("Clave:");
-		lblClave.setBounds(39, 98, 105, 14);
-		panel.add(lblClave);
+        JLabel lblClave = new JLabel("Clave");
+        lblClave.setFont(Tema.NORMAL);
+        lblClave.setForeground(Tema.TEXTO_SUAVE);
+        txtClave = new JPasswordField();
 
-		txtClave = new JPasswordField();
-		txtClave.setBounds(39, 128, 191, 20);
-		panel.add(txtClave);
+        form.add(lblUsuario);
+        form.add(txtUsuario);
+        form.add(lblClave);
+        form.add(txtClave);
+        panel.add(form, BorderLayout.CENTER);
 
-		JButton btnLogin = new JButton("Ingresar");
-		btnLogin.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				ingresar();
-			}
-		});
-		btnLogin.setBounds(39, 175, 105, 23);
-		panel.add(btnLogin);
+        JPanel sur = new JPanel(new GridLayout(0, 1, 0, 10));
+        sur.setBackground(Tema.FONDO);
 
-		getRootPane().setDefaultButton(btnLogin);
-	}
-	
-	
-	public void ingresar() {
-		String usuario = txtUsuario.getText().trim();
-		String clave = new String(txtClave.getPassword()).trim();
+        JButton btnLogin = Tema.botonPrimario("Ingresar");
+        btnLogin.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                ingresar();
+            }
+        });
 
-		if (usuario.isEmpty() || clave.isEmpty()) {
-			JOptionPane.showMessageDialog(this, "Debes ingresar usuario y clave.", "Datos incompletos", JOptionPane.WARNING_MESSAGE);
-			return;
-		}
+        JButton btnVolver = Tema.botonSecundario("Volver");
+        btnVolver.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                new DialogLogin().setVisible(true);
+                dispose();
+            }
+        });
 
-		CuentaUsuario cuenta = buscarCuenta(usuario, clave);
-		if (cuenta == null) {
-			JOptionPane.showMessageDialog(this, "Usuario o clave incorrectos.", "Error", JOptionPane.ERROR_MESSAGE);
-			return;
-		}
+        sur.add(btnLogin);
+        sur.add(btnVolver);
+        panel.add(sur, BorderLayout.SOUTH);
 
-		BolsaLaboral.getInstancia().setCuentalog(cuenta);
+        getRootPane().setDefaultButton(btnLogin);
+    }
 
-		if (cuenta.getRol().equalsIgnoreCase("candidato")) {
-			MenuCand menu = new MenuCand();
-			menu.setVisible(true);
-			dispose();
-		} else if (cuenta.getRol().equalsIgnoreCase("centro") || cuenta.getRol().equalsIgnoreCase("empleador")) {
-			MenuCentro menu = new MenuCentro();
-			menu.setVisible(true);
-			dispose();
-		} else {
-			JOptionPane.showMessageDialog(this, "El rol de la cuenta no es valido.", "Error", JOptionPane.ERROR_MESSAGE);
-		}
-	}
-	
-	public CuentaUsuario buscarCuenta(String usuario, String clave) {
-		BolsaLaboral bolsa = BolsaLaboral.getInstancia();
-		for (Candidato c : bolsa.getCandidatos()) {
-			CuentaUsuario cu = c.getCuenta();
-			if (cu != null && cu.getNombreUsuario().equals(usuario) && cu.getClave().equals(clave)) {
-				return cu;
-			}
-		}
-		for (CentroEmpleador ce : bolsa.getCentros()) {
-			if (ce.getRep() != null) {
-				CuentaUsuario cu = ce.getRep().getCuenta();
-				if (cu != null && cu.getNombreUsuario().equals(usuario) && cu.getClave().equals(clave)) {
-					return cu;
-				}
-			}
-		}
-		return null;
-	}
+    public void ingresar() {
+     }
+
+    public CuentaUsuario buscarCuenta(String usuario, String clave) {
+    	return null;
+    }
 }

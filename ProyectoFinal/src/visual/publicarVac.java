@@ -120,5 +120,39 @@ public class publicarVac extends JDialog {
     }
 
     public void publicar() {
-    }s
+    	if (emp == null) {
+            JOptionPane.showMessageDialog(this, "No se encontro el centro logueado.", "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (txtPuesto.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Debes indicar el puesto de la vacante.", "Datos incompletos",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        float salMin = ((Number) spnSalMin.getValue()).floatValue();
+        float salMax = ((Number) spnSalMax.getValue()).floatValue();
+        float coincidencia = ((Number) spnCoincidencia.getValue()).floatValue();
+        int plazas = ((Number) spnPlazas.getValue()).intValue();
+
+        if (salMin > salMax) {
+            JOptionPane.showMessageDialog(this, "El salario mínimo no puede ser mayor que el máximo.",
+                    "Datos inválidos", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String perfil = (String) cmbPerfil.getSelectedItem();
+        Vacante vac = new Vacante("V-" + BolsaLaboral.generadorIdVac, emp, txtPuesto.getText().trim(),
+                txtDescripcion.getText().trim(), salMin, salMax, txtProvincia.getText().trim(),
+                chkLicencia.isSelected(), chkMudanza.isSelected(), perfil, coincidencia, plazas);
+        vac.setEstado("activa");
+        BolsaLaboral.getInstancia().publicarVacante(vac);
+        BolsaLaboral.generadorIdVac++;
+        BolsaLaboral.getInstancia().saveDatos();
+
+        JOptionPane.showMessageDialog(this, "Vacante publicada con éxito.", "Éxito",
+                JOptionPane.INFORMATION_MESSAGE);
+        dispose();
+    }
 }

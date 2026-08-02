@@ -38,7 +38,7 @@ public class MenuCand extends JFrame {
         JMenuItem mntmVerVacantes = new JMenuItem("Ver vacantes disponibles");
         mntmVerVacantes.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		VerVacantes vervac = new VerVacantes();
+        		VerVacantes vervac = new VerVacantes(false);
 				vervac.setModal(true);
 				vervac.setVisible(true);
         	}

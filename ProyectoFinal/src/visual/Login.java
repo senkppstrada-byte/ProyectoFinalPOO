@@ -86,51 +86,9 @@ public class Login extends JFrame {
     }
 
     public void ingresar() {
-        String usuario = txtUsuario.getText().trim();
-        String clave = new String(txtClave.getPassword()).trim();
-
-        if (usuario.isEmpty() || clave.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Debes ingresar usuario y clave.", "Datos incompletos",
-                    JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        CuentaUsuario cuenta = buscarCuenta(usuario, clave);
-        if (cuenta == null) {
-            JOptionPane.showMessageDialog(this, "Usuario o clave incorrectos.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        BolsaLaboral.getInstancia().setCuentalog(cuenta);
-
-        if (cuenta.getRol().equalsIgnoreCase("candidato")) {
-            new MenuCand().setVisible(true);
-            dispose();
-        } else if (cuenta.getRol().equalsIgnoreCase("centro") || cuenta.getRol().equalsIgnoreCase("empleador")) {
-            new MenuCentro().setVisible(true);
-            dispose();
-        } else {
-            JOptionPane.showMessageDialog(this, "El rol de la cuenta no es válido.", "Error",
-                    JOptionPane.ERROR_MESSAGE);
-        }
     }
 
     public CuentaUsuario buscarCuenta(String usuario, String clave) {
-        BolsaLaboral bolsa = BolsaLaboral.getInstancia();
-        for (Candidato c : bolsa.getCandidatos()) {
-            CuentaUsuario cu = c.getCuenta();
-            if (cu != null && cu.getNombreUsuario().equals(usuario) && cu.getClave().equals(clave)) {
-                return cu;
-            }
-        }
-        for (CentroEmpleador ce : bolsa.getCentros()) {
-            if (ce.getRep() != null) {
-                CuentaUsuario cu = ce.getRep().getCuenta();
-                if (cu != null && cu.getNombreUsuario().equals(usuario) && cu.getClave().equals(clave)) {
-                    return cu;
-                }
-            }
-        }
         return null;
     }
 }

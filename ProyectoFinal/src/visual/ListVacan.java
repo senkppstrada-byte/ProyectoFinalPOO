@@ -92,5 +92,18 @@ public class ListVacan extends JDialog {
     }
 
     public void loadVacantes() {
+    	 model.setRowCount(0);
+         if (emp == null) {
+             JOptionPane.showMessageDialog(this, "No se encontro el centro logueado.", "Error",
+                     JOptionPane.ERROR_MESSAGE);
+             return;
+         }
+         for (Vacante v : BolsaLaboral.getInstancia().getVacantes()) {
+             if (v.getCentro() != null && v.getCentro().getId().equals(emp.getId())) {
+                 Object[] fila = { v.getId(), v.getPuesto(), v.getPerfilRequerido(), v.getProvincia(),
+                         v.getPlazasOcupadas() + "/" + v.getPlazasTotales(), v.getEstado() };
+                 model.addRow(fila);
+             }
+         }
     }
 }

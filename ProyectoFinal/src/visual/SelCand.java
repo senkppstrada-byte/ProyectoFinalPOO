@@ -1,91 +1,76 @@
 package visual;
 
 import java.awt.BorderLayout;
-
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import logica.BolsaLaboral;
-import logica.CentroEmpleador;
-import logica.Obrero;
-import logica.Postulacion;
-import logica.Profesional;
-import logica.Tecnico;
-import logica.Vacante;
 import logica.Candidato;
+import logica.Postulacion;
+import logica.Vacante;
 
 public class SelCand extends JDialog {
 
-    private final JPanel contentPanel = new JPanel();
-    private FondoMenu fondomenu;
     private DefaultTableModel modelt;
-    private Object[] rowt;
     private DefaultTableModel models;
-    private Object[] rows;
+    private JTable tbltop;
+    private JTable tblSels;
     private Candidato selectedt = null;
     private Candidato selectedb = null;
-    private JTable tbltop;
-    private JButton okButton;
-    private JButton cancelButton;
-    private Vacante vacante;
-    private CentroEmpleador emp = BolsaLaboral.getInstancia().buscarCentroPorCuenta(BolsaLaboral.getInstancia().getCuentalog());
-    private JPanel panelb;
-    private JPanel panels;
-    private JScrollPane spSels;
     private JButton btnbajar;
     private JButton btnsubir;
-    private JTable tblSels;
+    private JButton okButton;
+    private Vacante vacante;
     private ArrayList<Candidato> listTop = new ArrayList<Candidato>();
     private ArrayList<Candidato> listBot = new ArrayList<Candidato>();
 
     public SelCand(Vacante vac) {
         this.vacante = vac;
 
-        setTitle("Seleccionar candidato");
-        setBounds(100, 100, 781, 462);
+        setTitle("Seleccionar candidato - " + vac.getPuesto());
+        setSize(760, 480);
         setLocationRelativeTo(null);
 
-        fondomenu = new FondoMenu("/img/mant.png");
-        fondomenu.setLayout(new BorderLayout());
-        setContentPane(fondomenu);
+        JPanel contentPane = new JPanel(new BorderLayout(0, 8));
+        contentPane.setBackground(Tema.FONDO);
+        contentPane.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
+        setContentPane(contentPane);
 
-        contentPanel.setOpaque(false);
-        contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-        fondomenu.add(contentPanel, BorderLayout.CENTER);
-        contentPanel.setLayout(new BorderLayout(0, 0));
+        JLabel info = new JLabel("Candidatos disponibles (ordenados por match). Baja a los que quieras contratar.");
+        info.setFont(Tema.NORMAL);
+        info.setForeground(Tema.TEXTO_SUAVE);
+        contentPane.add(info, BorderLayout.NORTH);
 
-        JPanel panelt = new JPanel();
-        panelt.setOpaque(false);
-        contentPanel.add(panelt, BorderLayout.NORTH);
-        panelt.setLayout(new BorderLayout(0, 0));
+        JPanel centro = new JPanel(new GridLayout(2, 1, 0, 8));
+        centro.setBackground(Tema.FONDO);
 
-        JScrollPane spTop = new JScrollPane();
-        panelt.add(spTop, BorderLayout.CENTER);
-
-        String[] headerst = {"Codigo", "Nombre", "Provincia", "Perfil", "Match"};
-        modelt = new DefaultTableModel();
-        modelt.setColumnIdentifiers(headerst);
-
-        tbltop = new JTable();
-        tbltop.setModel(modelt);
+        String[] headers = { "Código", "Nombre", "Provincia", "Perfil", "Match" };
+        modelt = new DefaultTableModel(headers, 0) {
+            public boolean isCellEditable(int r, int c) {
+                return false;
+            }
+        };
+        tbltop = new JTable(modelt);
+        tbltop.setRowHeight(22);
         tbltop.addMouseListener(new MouseAdapter() {
-            @Override
             public void mouseClicked(MouseEvent e) {
                 int index = tbltop.getSelectedRow();
                 if (index >= 0 && index < listTop.size()) {
@@ -95,47 +80,14 @@ public class SelCand extends JDialog {
             }
         });
 
-        spTop.setViewportView(tbltop);
-        
-        panelb = new JPanel();
-        panelb.setOpaque(false);
-        contentPanel.add(panelb, BorderLayout.CENTER);
-        panelb.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-
-        btnbajar = new JButton("Bajar");
-        btnbajar.setEnabled(false);
-        btnbajar.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                bajar();
+        models = new DefaultTableModel(headers, 0) {
+            public boolean isCellEditable(int r, int c) {
+                return false;
             }
-        });
-        panelb.add(btnbajar);
-
-        btnsubir = new JButton("Subir");
-        btnsubir.setEnabled(false);
-        btnsubir.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                subir();
-            }
-        });
-        panelb.add(btnsubir);
-
-        panels = new JPanel();
-        panels.setOpaque(false);
-        contentPanel.add(panels, BorderLayout.SOUTH);
-        panels.setLayout(new BorderLayout(0, 0));
-
-        spSels = new JScrollPane();
-        panels.add(spSels, BorderLayout.CENTER);
-
-        String[] headerss = {"Codigo", "Nombre", "Provincia", "Perfil", "Match"};
-        models = new DefaultTableModel();
-        models.setColumnIdentifiers(headerss);
-
-        tblSels = new JTable();
-        tblSels.setModel(models);
+        };
+        tblSels = new JTable(models);
+        tblSels.setRowHeight(22);
         tblSels.addMouseListener(new MouseAdapter() {
-            @Override
             public void mouseClicked(MouseEvent e) {
                 int index = tblSels.getSelectedRow();
                 if (index >= 0 && index < listBot.size()) {
@@ -144,35 +96,70 @@ public class SelCand extends JDialog {
                 }
             }
         });
-        spSels.setViewportView(tblSels);
-        
-        JPanel buttonPane = new JPanel();
-        buttonPane.setOpaque(false);
-        buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
-        fondomenu.add(buttonPane, BorderLayout.SOUTH);
 
-        {
-            okButton = new JButton("Seleccionar");
-            okButton.setEnabled(false);
-            okButton.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    seleccionar();
-                }
-            });
-            okButton.setActionCommand("OK");
-            buttonPane.add(okButton);
-            getRootPane().setDefaultButton(okButton);
-        }
-        {
-            cancelButton = new JButton("Cancelar");
-            cancelButton.setActionCommand("Cancel");
-            cancelButton.addActionListener(e -> dispose());
-            buttonPane.add(cancelButton);
-        }
+        JPanel arriba = new JPanel(new BorderLayout(0, 4));
+        arriba.setBackground(Tema.FONDO);
+        JLabel lblTop = new JLabel("Disponibles");
+        lblTop.setFont(Tema.SUBTITULO);
+        lblTop.setForeground(Tema.TEXTO);
+        arriba.add(lblTop, BorderLayout.NORTH);
+        arriba.add(new JScrollPane(tbltop), BorderLayout.CENTER);
+
+        JPanel abajo = new JPanel(new BorderLayout(0, 4));
+        abajo.setBackground(Tema.FONDO);
+        JLabel lblBot = new JLabel("Elegidos para contratar");
+        lblBot.setFont(Tema.SUBTITULO);
+        lblBot.setForeground(Tema.TEXTO);
+        abajo.add(lblBot, BorderLayout.NORTH);
+        abajo.add(new JScrollPane(tblSels), BorderLayout.CENTER);
+
+        centro.add(arriba);
+        centro.add(abajo);
+        contentPane.add(centro, BorderLayout.CENTER);
+
+        JPanel botones = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        botones.setBackground(Tema.FONDO);
+
+        btnbajar = Tema.botonSecundario("Bajar");
+        btnbajar.setEnabled(false);
+        btnbajar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                bajar();
+            }
+        });
+        botones.add(btnbajar);
+
+        btnsubir = Tema.botonSecundario("Subir");
+        btnsubir.setEnabled(false);
+        btnsubir.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                subir();
+            }
+        });
+        botones.add(btnsubir);
+
+        okButton = Tema.botonPrimario("Contratar seleccionados");
+        okButton.setEnabled(false);
+        okButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                seleccionar();
+            }
+        });
+        botones.add(okButton);
+
+        JButton cerrar = Tema.botonSecundario("Cerrar");
+        cerrar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+            }
+        });
+        botones.add(cerrar);
+
+        contentPane.add(botones, BorderLayout.SOUTH);
 
         loadtop();
     }
-    
+
     public void bajar() {
         if (selectedt != null && listTop.contains(selectedt)) {
             listBot.add(selectedt);
@@ -182,7 +169,7 @@ public class SelCand extends JDialog {
             refrescar();
         }
     }
-    
+
     public void subir() {
         if (selectedb != null && listBot.contains(selectedb)) {
             listTop.add(selectedb);
@@ -192,18 +179,13 @@ public class SelCand extends JDialog {
             refrescar();
         }
     }
-    
+
     public void seleccionar() {
         if (listBot.isEmpty()) {
             return;
         }
-        int opcion = JOptionPane.showConfirmDialog(
-            SelCand.this,
-            "Estas seguro que deseas seleccionar a los candidatos elegidos?",
-            "Confirmar",
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.QUESTION_MESSAGE
-        );
+        int opcion = JOptionPane.showConfirmDialog(this, "¿Deseas contratar a los candidatos elegidos?", "Confirmar",
+                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         if (opcion == JOptionPane.YES_OPTION) {
             BolsaLaboral bolsa = BolsaLaboral.getInstancia();
             for (Candidato c : listBot) {
@@ -211,79 +193,37 @@ public class SelCand extends JDialog {
                     break;
                 }
                 float match = bolsa.calcMatch(vacante, c);
-                Postulacion p = new Postulacion("P-" + BolsaLaboral.generadorIdPos, c, vacante, LocalDate.now(), match, "seleccionada");
+                Postulacion p = new Postulacion("P-" + BolsaLaboral.generadorIdPos, c, vacante, LocalDate.now(), match,
+                        "seleccionada");
                 bolsa.publicarPostulacion(p);
                 BolsaLaboral.generadorIdPos++;
                 vacante.ocuparPlaza();
             }
             bolsa.saveDatos();
-            JOptionPane.showMessageDialog(SelCand.this, "Candidatos seleccionados con exito", "Exito", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Candidatos contratados con éxito.", "Éxito",
+                    JOptionPane.INFORMATION_MESSAGE);
             dispose();
         }
     }
-    
+
     public void loadtop() {
-        listTop.clear();
-        listBot.clear();
-        final BolsaLaboral bolsa = BolsaLaboral.getInstancia();
-        for (Candidato c : bolsa.getCandidatos()) {
-            if (estaDisponible(c)) {
-                float match = bolsa.calcMatch(vacante, c);
-                if (match >= vacante.getCoincidenciaMinima()) {
-                    listTop.add(c);
-                }
-            }
-        }
-        Collections.sort(listTop, new Comparator<Candidato>() {
-            public int compare(Candidato a, Candidato b) {
-                return Float.compare(bolsa.calcMatch(vacante, b), bolsa.calcMatch(vacante, a));
-            }
-        });
-        refrescar();
     }
-    
-    private boolean estaDisponible(Candidato c) {
-        BolsaLaboral bolsa = BolsaLaboral.getInstancia();
-        for (Postulacion p : bolsa.getPostulaciones()) {
-            if (p.getCandidato() != null && p.getCandidato().getId().equals(c.getId())
-                    && p.getEstado().equalsIgnoreCase("seleccionada")) {
-                return false;
-            }
-        }
-        return true;
-    }
-    
+
     public void refrescar() {
         modelt.setRowCount(0);
-        rowt = new Object[modelt.getColumnCount()];
         for (Candidato c : listTop) {
-            llenarFila(rowt, c);
-            modelt.addRow(rowt);
+            modelt.addRow(fila(c));
         }
-
         models.setRowCount(0);
-        rows = new Object[models.getColumnCount()];
         for (Candidato c : listBot) {
-            llenarFila(rows, c);
-            models.addRow(rows);
+            models.addRow(fila(c));
         }
-
         okButton.setEnabled(!listBot.isEmpty());
     }
 
-    public void llenarFila(Object[] fila, Candidato c) {
-        fila[0] = c.getId();
-        fila[1] = c.getNombreCompleto();
-        fila[2] = c.getProvincia();
-        if (c instanceof Tecnico) {
-            fila[3] = "Tecnico";
-        } else if (c instanceof Profesional) {
-            fila[3] = "Profesional";
-        } else if (c instanceof Obrero) {
-            fila[3] = "Obrero";
-        } else {
-            fila[3] = "";
-        }
-        fila[4] = String.format("%.1f%%", BolsaLaboral.getInstancia().calcMatch(vacante, c));
+    private Object[] fila(Candidato c) {
+        float match = BolsaLaboral.getInstancia().calcMatch(vacante, c);
+        return new Object[] { c.getId(), c.getNombreCompleto(), c.getProvincia(), Util.perfil(c),
+                String.format("%.1f%%", match) };
     }
 }

@@ -5,6 +5,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -12,148 +13,99 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
 
 import logica.BolsaLaboral;
-import logica.Candidato;
 import logica.CentroEmpleador;
 import logica.CuentaUsuario;
 import logica.Representante;
 
 public class RegistroCentro extends JDialog {
 
-	private JTextField txtUsuario;
-	private JPasswordField txtClave;
-	private JTextField txtCorreo;
-	private JTextField txtRepNombre;
-	private JTextField txtRepCedula;
-	private JTextField txtNombreComercial;
-	private JTextField txtTipoCentro;
-	private JTextField txtDireccion;
+    private JTextField txtUsuario;
+    private JPasswordField txtClave;
+    private JTextField txtCorreo;
+    private JTextField txtRepNombre;
+    private JTextField txtRepCedula;
+    private JTextField txtNombreComercial;
+    private JTextField txtTipoCentro;
+    private JTextField txtDireccion;
 
-	public RegistroCentro() {
-		setTitle("Registro de Centro");
-		setBounds(100, 100, 460, 420);
-		setLocationRelativeTo(null);
+    public RegistroCentro() {
+        setTitle("Registro de Centro");
+        setSize(440, 440);
+        setLocationRelativeTo(null);
 
-		JPanel contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));
-		contentPane.setLayout(new BorderLayout(0, 0));
-		setContentPane(contentPane);
+        JPanel contentPane = new JPanel(new BorderLayout(0, 12));
+        contentPane.setBackground(Tema.FONDO);
+        contentPane.setBorder(BorderFactory.createEmptyBorder(16, 18, 16, 18));
+        setContentPane(contentPane);
 
-		JPanel form = new JPanel();
-		form.setLayout(new GridLayout(0, 2, 6, 6));
-		contentPane.add(form, BorderLayout.CENTER);
+        JLabel titulo = new JLabel("Registro de Centro");
+        titulo.setFont(Tema.SUBTITULO);
+        titulo.setForeground(Tema.TEXTO);
+        contentPane.add(titulo, BorderLayout.NORTH);
 
-		construirFormulario(form);
+        JPanel form = new JPanel(new GridLayout(0, 2, 8, 8));
+        form.setBackground(Tema.FONDO);
+        contentPane.add(form, BorderLayout.CENTER);
+        construirFormulario(form);
 
-		JPanel panelBotones = new JPanel();
-		JButton btnRegistrar = new JButton("Registrar");
-		btnRegistrar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				registrar();
-			}
-		});
-		panelBotones.add(btnRegistrar);
+        JPanel panelBotones = new JPanel();
+        panelBotones.setBackground(Tema.FONDO);
 
-		JButton btnCancelar = new JButton("Cancelar");
-		btnCancelar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dispose();
-			}
-		});
-		panelBotones.add(btnCancelar);
+        JButton btnRegistrar = Tema.botonPrimario("Registrar");
+        btnRegistrar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                registrar();
+            }
+        });
+        panelBotones.add(btnRegistrar);
 
-		contentPane.add(panelBotones, BorderLayout.SOUTH);
-	}
+        JButton btnCancelar = Tema.botonSecundario("Cancelar");
+        btnCancelar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+            }
+        });
+        panelBotones.add(btnCancelar);
 
-	private void construirFormulario(JPanel form) {
-		form.add(new JLabel("Usuario:"));
-		txtUsuario = new JTextField();
-		form.add(txtUsuario);
+        contentPane.add(panelBotones, BorderLayout.SOUTH);
+    }
 
-		form.add(new JLabel("Clave:"));
-		txtClave = new JPasswordField();
-		form.add(txtClave);
+    private void construirFormulario(JPanel form) {
+        form.add(new JLabel("Usuario:"));
+        txtUsuario = new JTextField();
+        form.add(txtUsuario);
 
-		form.add(new JLabel("Correo:"));
-		txtCorreo = new JTextField();
-		form.add(txtCorreo);
+        form.add(new JLabel("Clave:"));
+        txtClave = new JPasswordField();
+        form.add(txtClave);
 
-		form.add(new JLabel("Nombre del representante:"));
-		txtRepNombre = new JTextField();
-		form.add(txtRepNombre);
+        form.add(new JLabel("Correo:"));
+        txtCorreo = new JTextField();
+        form.add(txtCorreo);
 
-		form.add(new JLabel("Cedula del representante:"));
-		txtRepCedula = new JTextField();
-		form.add(txtRepCedula);
+        form.add(new JLabel("Nombre del representante:"));
+        txtRepNombre = new JTextField();
+        form.add(txtRepNombre);
 
-		form.add(new JLabel("Nombre comercial:"));
-		txtNombreComercial = new JTextField();
-		form.add(txtNombreComercial);
+        form.add(new JLabel("Cedula del representante:"));
+        txtRepCedula = new JTextField();
+        form.add(txtRepCedula);
 
-		form.add(new JLabel("Tipo de centro:"));
-		txtTipoCentro = new JTextField();
-		form.add(txtTipoCentro);
+        form.add(new JLabel("Nombre comercial:"));
+        txtNombreComercial = new JTextField();
+        form.add(txtNombreComercial);
 
-		form.add(new JLabel("Direccion:"));
-		txtDireccion = new JTextField();
-		form.add(txtDireccion);
-	}
-	public void registrar() {
-		String usuario = txtUsuario.getText().trim();
-		String clave = new String(txtClave.getPassword()).trim();
-		String correo = txtCorreo.getText().trim();
-		String repNombre = txtRepNombre.getText().trim();
-		String repCedula = txtRepCedula.getText().trim();
-		String nombreComercial = txtNombreComercial.getText().trim();
-		String tipoCentro = txtTipoCentro.getText().trim();
-		String direccion = txtDireccion.getText().trim();
+        form.add(new JLabel("Tipo de centro:"));
+        txtTipoCentro = new JTextField();
+        form.add(txtTipoCentro);
 
-		if (usuario.isEmpty() || clave.isEmpty() || correo.isEmpty() || repNombre.isEmpty() || repCedula.isEmpty()
-				|| nombreComercial.isEmpty()) {
-			JOptionPane.showMessageDialog(this, "Completa todos los campos obligatorios.", "Faltan datos",
-					JOptionPane.WARNING_MESSAGE);
-			return;
-		}
-		if (usuarioExiste(usuario)) {
-			JOptionPane.showMessageDialog(this, "Ese nombre de usuario ya existe.", "Usuario ocupado",
-					JOptionPane.WARNING_MESSAGE);
-			return;
-		}
+        form.add(new JLabel("Dirección:"));
+        txtDireccion = new JTextField();
+        form.add(txtDireccion);
+    }
 
-		BolsaLaboral bolsa = BolsaLaboral.getInstancia();
-
-		CuentaUsuario cuenta = new CuentaUsuario("CU-" + BolsaLaboral.generadorIdCuenta, correo, usuario, clave,
-				"centro");
-		BolsaLaboral.generadorIdCuenta++;
-
-		Representante rep = new Representante("REP-" + BolsaLaboral.generadorIdCent, repCedula, repNombre, cuenta);
-		CentroEmpleador centro = new CentroEmpleador("CE-" + BolsaLaboral.generadorIdCent, nombreComercial, tipoCentro,
-				direccion, 0, rep);
-
-		bolsa.registrarCentro(centro);
-		BolsaLaboral.generadorIdCent++;
-		bolsa.saveDatos();
-
-		JOptionPane.showMessageDialog(this, "Centro registrado. Ya puedes iniciar sesion.", "Listo",
-				JOptionPane.INFORMATION_MESSAGE);
-		dispose();
-	}
-
-	private boolean usuarioExiste(String usuario) {
-		BolsaLaboral bolsa = BolsaLaboral.getInstancia();
-		for (Candidato c : bolsa.getCandidatos()) {
-			if (c.getCuenta() != null && c.getCuenta().getNombreUsuario().equalsIgnoreCase(usuario)) {
-				return true;
-			}
-		}
-		for (CentroEmpleador ce : bolsa.getCentros()) {
-			if (ce.getRep() != null && ce.getRep().getCuenta() != null
-					&& ce.getRep().getCuenta().getNombreUsuario().equalsIgnoreCase(usuario)) {
-				return true;
-			}
-		}
-		return false;
-	}
+    public void registrar() {
+    }
 }

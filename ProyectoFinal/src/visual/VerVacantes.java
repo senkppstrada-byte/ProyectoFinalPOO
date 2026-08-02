@@ -65,5 +65,13 @@ public class VerVacantes extends JDialog {
     }
 
     public void loadVacantes() {
+        model.setRowCount(0);
+        for (Vacante v : BolsaLaboral.getInstancia().getVacantes()) {
+            if (v.getEstado().equalsIgnoreCase("activa")) {
+                Object[] fila = { v.getId(), v.getCentro().getNombreComercial(), v.getPuesto(), v.getDescripcion(),
+                        v.getSalarioMin() + " - " + v.getSalarioMax(), v.getProvincia(), v.getPerfilRequerido() };
+                model.addRow(fila);
+            }
+        }
     }
 }

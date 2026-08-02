@@ -65,5 +65,16 @@ public class ListPos extends JDialog {
     }
 
     public void loadPostulaciones() {
+    	model.setRowCount(0);
+        if (cand == null) {
+            return;
+        }
+        for (Postulacion p : BolsaLaboral.getInstancia().getPostulaciones()) {
+            if (p.getCandidato() != null && p.getCandidato().getId().equalsIgnoreCase(cand.getId())) {
+                Object[] fila = { p.getId(), p.getVacante().getCentro().getNombreComercial(),
+                        p.getVacante().getPuesto(), p.getFecha(), p.getEstado() };
+                model.addRow(fila);
+            }
+        }
     }
 }

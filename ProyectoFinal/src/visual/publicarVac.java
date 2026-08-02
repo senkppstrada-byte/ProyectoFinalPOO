@@ -1,11 +1,11 @@
 package visual;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -13,8 +13,9 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
+import javax.swing.SpinnerNumberModel;
 
 import logica.BolsaLaboral;
 import logica.CentroEmpleador;
@@ -22,162 +23,102 @@ import logica.Vacante;
 
 public class publicarVac extends JDialog {
 
-	private final JPanel contentPanel = new JPanel();
-	private FondoMenu fondomenu;
-	private JTextField txtPuesto;
-	private JTextField txtDescripcion;
-	private JTextField txtSalMin;
-	private JTextField txtSalMax;
-	private JTextField txtProvincia;
-	private JTextField txtCoincidencia;
-	private JTextField txtPlazas;
-	private JComboBox<String> cmbPerfil;
-	private JCheckBox chkLicencia;
-	private JCheckBox chkMudanza;
-	private JButton okButton;
-	private JButton cancelButton;
-	private CentroEmpleador emp = BolsaLaboral.getInstancia().buscarCentroPorCuenta(BolsaLaboral.getInstancia().getCuentalog());
+    private JTextField txtPuesto;
+    private JTextField txtDescripcion;
+    private JSpinner spnSalMin;
+    private JSpinner spnSalMax;
+    private JTextField txtProvincia;
+    private JSpinner spnCoincidencia;
+    private JSpinner spnPlazas;
+    private JComboBox<String> cmbPerfil;
+    private JCheckBox chkLicencia;
+    private JCheckBox chkMudanza;
+    private CentroEmpleador emp = BolsaLaboral.getInstancia()
+            .buscarCentroPorCuenta(BolsaLaboral.getInstancia().getCuentalog());
 
-	public publicarVac() {
-		setTitle("Publicar vacante");
-		setBounds(100, 100, 520, 420);
-		setLocationRelativeTo(null);
+    public publicarVac() {
+        setTitle("Publicar vacante");
+        setSize(480, 480);
+        setLocationRelativeTo(null);
 
-		fondomenu = new FondoMenu("/img/mant.png");
-		fondomenu.setLayout(new BorderLayout());
-		setContentPane(fondomenu);
+        JPanel contentPane = new JPanel(new BorderLayout(0, 12));
+        contentPane.setBackground(Tema.FONDO);
+        contentPane.setBorder(BorderFactory.createEmptyBorder(16, 18, 16, 18));
+        setContentPane(contentPane);
 
-		contentPanel.setOpaque(false);
-		contentPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
-		fondomenu.add(contentPanel, BorderLayout.CENTER);
-		contentPanel.setLayout(new GridLayout(0, 2, 8, 8));
-		
-        contentPanel.add(new JLabel("Puesto:"));
+        JLabel titulo = new JLabel("Publicar vacante");
+        titulo.setFont(Tema.SUBTITULO);
+        titulo.setForeground(Tema.TEXTO);
+        contentPane.add(titulo, BorderLayout.NORTH);
+
+        JPanel form = new JPanel(new GridLayout(0, 2, 8, 8));
+        form.setBackground(Tema.FONDO);
+        contentPane.add(form, BorderLayout.CENTER);
+
+        form.add(new JLabel("Puesto:"));
         txtPuesto = new JTextField();
-        contentPanel.add(txtPuesto);
+        form.add(txtPuesto);
 
-        contentPanel.add(new JLabel("Descripcion:"));
+        form.add(new JLabel("Descripción:"));
         txtDescripcion = new JTextField();
-        contentPanel.add(txtDescripcion);
+        form.add(txtDescripcion);
 
-        contentPanel.add(new JLabel("Salario minimo:"));
-        txtSalMin = new JTextField();
-        contentPanel.add(txtSalMin);
+        form.add(new JLabel("Salario mínimo:"));
+        spnSalMin = new JSpinner(new SpinnerNumberModel(10000.0, 0.0, 1000000.0, 500.0));
+        form.add(spnSalMin);
 
-        contentPanel.add(new JLabel("Salario maximo:"));
-        txtSalMax = new JTextField();
-        contentPanel.add(txtSalMax);
+        form.add(new JLabel("Salario máximo:"));
+        spnSalMax = new JSpinner(new SpinnerNumberModel(20000.0, 0.0, 1000000.0, 500.0));
+        form.add(spnSalMax);
 
-        contentPanel.add(new JLabel("Provincia:"));
+        form.add(new JLabel("Provincia:"));
         txtProvincia = new JTextField();
-        contentPanel.add(txtProvincia);
+        form.add(txtProvincia);
 
-        contentPanel.add(new JLabel("Perfil requerido:"));
-        cmbPerfil = new JComboBox<String>();
-        cmbPerfil.addItem("Tecnico");
-        cmbPerfil.addItem("Profesional");
-        cmbPerfil.addItem("Obrero");
-        contentPanel.add(cmbPerfil);
+        form.add(new JLabel("Perfil requerido:"));
+        cmbPerfil = new JComboBox<String>(new String[] { "Tecnico", "Profesional", "Obrero" });
+        form.add(cmbPerfil);
 
-        contentPanel.add(new JLabel("Coincidencia minima:"));
-        txtCoincidencia = new JTextField();
-        contentPanel.add(txtCoincidencia);
+        form.add(new JLabel("Coincidencia mínima:"));
+        spnCoincidencia = new JSpinner(new SpinnerNumberModel(0.0, 0.0, 100.0, 5.0));
+        form.add(spnCoincidencia);
 
-        contentPanel.add(new JLabel("Plazas totales:"));
-        txtPlazas = new JTextField();
-        contentPanel.add(txtPlazas);
+        form.add(new JLabel("Plazas totales:"));
+        spnPlazas = new JSpinner(new SpinnerNumberModel(1, 1, 999, 1));
+        form.add(spnPlazas);
 
-        contentPanel.add(new JLabel("Requiere licencia:"));
+        form.add(new JLabel("Requiere licencia:"));
         chkLicencia = new JCheckBox();
-        chkLicencia.setOpaque(false);
-        contentPanel.add(chkLicencia);
+        chkLicencia.setBackground(Tema.FONDO);
+        form.add(chkLicencia);
 
-        contentPanel.add(new JLabel("Requiere mudanza:"));
+        form.add(new JLabel("Requiere mudanza:"));
         chkMudanza = new JCheckBox();
-        chkMudanza.setOpaque(false);
-        contentPanel.add(chkMudanza);
-        
-        JPanel buttonPane = new JPanel();
-        buttonPane.setOpaque(false);
-        buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
-        fondomenu.add(buttonPane, BorderLayout.SOUTH);
+        chkMudanza.setBackground(Tema.FONDO);
+        form.add(chkMudanza);
 
-        {
-            okButton = new JButton("Publicar");
-            okButton.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    publicar();
-                }
-            });
-            okButton.setActionCommand("OK");
-            buttonPane.add(okButton);
-            getRootPane().setDefaultButton(okButton);
-        }
-        {
-            cancelButton = new JButton("Cancelar");
-            cancelButton.setActionCommand("Cancel");
-            cancelButton.addActionListener(e -> dispose());
-            buttonPane.add(cancelButton);
-        }
-	}
-	
-	
-	
-    public void publicar() {
-        if (emp == null) {
-            JOptionPane.showMessageDialog(this, "Error: No se encontro la informacion del centro logueado.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        if (txtPuesto.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Debes indicar el puesto de la vacante.", "Datos incompletos", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+        JPanel panelBotones = new JPanel();
+        panelBotones.setBackground(Tema.FONDO);
 
-        float salMin;
-        float salMax;
-        float coincidencia;
-        int plazas;
-        try {
-            salMin = Float.parseFloat(txtSalMin.getText().trim());
-            salMax = Float.parseFloat(txtSalMax.getText().trim());
-            coincidencia = Float.parseFloat(txtCoincidencia.getText().trim());
-            plazas = Integer.parseInt(txtPlazas.getText().trim());
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "Salario, coincidencia y plazas deben ser numeros validos.", "Datos invalidos", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+        JButton btnPublicar = Tema.botonPrimario("Publicar");
+        btnPublicar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                publicar();
+            }
+        });
+        panelBotones.add(btnPublicar);
 
-        if (salMin > salMax) {
-            JOptionPane.showMessageDialog(this, "El salario minimo no puede ser mayor que el maximo.", "Datos invalidos", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        if (plazas <= 0) {
-            JOptionPane.showMessageDialog(this, "Las plazas totales deben ser mayores que cero.", "Datos invalidos", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        
-        
-        String perfil = cmbPerfil.getSelectedItem().toString();
-        Vacante vac = new Vacante(
-            "V-" + BolsaLaboral.generadorIdVac,
-            emp,
-            txtPuesto.getText().trim(),
-            txtDescripcion.getText().trim(),
-            salMin,
-            salMax,
-            txtProvincia.getText().trim(),
-            chkLicencia.isSelected(),
-            chkMudanza.isSelected(),
-            perfil,
-            coincidencia,
-            plazas
-        );
-        vac.setEstado("activa");
-        BolsaLaboral.getInstancia().publicarVacante(vac);
-        BolsaLaboral.generadorIdVac++;
+        JButton btnCancelar = Tema.botonSecundario("Cancelar");
+        btnCancelar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+            }
+        });
+        panelBotones.add(btnCancelar);
 
-        JOptionPane.showMessageDialog(this, "Vacante publicada con exito", "Exito", JOptionPane.INFORMATION_MESSAGE);
-        dispose();
+        contentPane.add(panelBotones, BorderLayout.SOUTH);
     }
-}	
 
+    public void publicar() {
+    }
+}

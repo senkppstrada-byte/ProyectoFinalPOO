@@ -7,13 +7,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import logica.BolsaLaboral;
@@ -22,46 +22,33 @@ import logica.Vacante;
 
 public class ListVacan extends JDialog {
 
-    private final JPanel contentPanel = new JPanel();
-    private FondoMenu fondomenu;
-    private DefaultTableModel model; 
-    private Object[] row;            
+    private DefaultTableModel model;
+    private JTable tblVac;
     private Vacante selected = null;
-    private JTable tblVac;            
     private JButton okButton;
-    private JButton cancelButton;
-    private CentroEmpleador emp = BolsaLaboral.getInstancia().buscarCentroPorCuenta(BolsaLaboral.getInstancia().getCuentalog());
+    private CentroEmpleador emp = BolsaLaboral.getInstancia()
+            .buscarCentroPorCuenta(BolsaLaboral.getInstancia().getCuentalog());
 
     public ListVacan() {
         setTitle("Lista de vacantes");
-        setBounds(100, 100, 600, 350); 
+        setSize(720, 380);
         setLocationRelativeTo(null);
-        
-        fondomenu = new FondoMenu("/img/mant.png");
-        fondomenu.setLayout(new BorderLayout());
-        setContentPane(fondomenu); 
 
-        contentPanel.setOpaque(false);
-        contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-        fondomenu.add(contentPanel, BorderLayout.CENTER);
-        contentPanel.setLayout(new BorderLayout(0, 0));
-        
-        JPanel panel = new JPanel();
-        panel.setOpaque(false);
-        contentPanel.add(panel, BorderLayout.CENTER);
-        panel.setLayout(new BorderLayout(0, 0));
-        
-        JScrollPane scrollPane = new JScrollPane();
-        panel.add(scrollPane, BorderLayout.CENTER);
-        
-        String[] headers = {"Código", "Empresa", "Puesto", "Descripción", "Rango Salarial", "Provincia", "Perfil Buscado"};
-        model = new DefaultTableModel();
-        model.setColumnIdentifiers(headers);
-        
-        tblVac = new JTable();
-        tblVac.setModel(model);
+        JPanel contentPane = new JPanel(new BorderLayout(0, 10));
+        contentPane.setBackground(Tema.FONDO);
+        contentPane.setBorder(BorderFactory.createEmptyBorder(14, 14, 14, 14));
+        setContentPane(contentPane);
+
+        String[] headers = { "Código", "Puesto", "Perfil", "Provincia", "Plazas", "Estado" };
+        model = new DefaultTableModel(headers, 0) {
+            public boolean isCellEditable(int r, int c) {
+                return false;
+            }
+        };
+
+        tblVac = new JTable(model);
+        tblVac.setRowHeight(22);
         tblVac.addMouseListener(new MouseAdapter() {
-            @Override
             public void mouseClicked(MouseEvent e) {
                 int index = tblVac.getSelectedRow();
                 if (index >= 0) {
@@ -70,65 +57,40 @@ public class ListVacan extends JDialog {
                 }
             }
         });
-        
-        scrollPane.setViewportView(tblVac);
+        contentPane.add(new JScrollPane(tblVac), BorderLayout.CENTER);
 
-        JPanel buttonPane = new JPanel();
-        buttonPane.setOpaque(false);
-        buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
-        fondomenu.add(buttonPane, BorderLayout.SOUTH);
+        JPanel buttonPane = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        buttonPane.setBackground(Tema.FONDO);
 
-        {
-            okButton = new JButton("Ver candidatos");
-            okButton.setEnabled(false);            
-            okButton.addActionListener(new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
-                    if (selected != null && emp != null) {
-                        SelCand dialog = new SelCand(selected);
-                        dialog.setModal(true);
-                        dialog.setVisible(true);
-                        
-                        loadVacantes();
-                        okButton.setEnabled(false);
-                        selected = null;
-                        
-                    } else if (emp == null) {
-                        JOptionPane.showMessageDialog(ListVacan.this, 
-                            "Error: No se encontró la información de la empresa logueada.", 
-                            "Error", 
-                            JOptionPane.ERROR_MESSAGE);
-                    }
+        okButton = Tema.botonPrimario("Ver candidatos");
+        okButton.setEnabled(false);
+        okButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (selected != null) {
+                    SelCand dialog = new SelCand(selected);
+                    dialog.setModal(true);
+                    dialog.setVisible(true);
+                    loadVacantes();
+                    okButton.setEnabled(false);
+                    selected = null;
                 }
-            });
-            okButton.setActionCommand("OK");
-            buttonPane.add(okButton);
-            getRootPane().setDefaultButton(okButton);
-        }
-        {
-            cancelButton = new JButton("Cancelar");
-            cancelButton.setActionCommand("Cancel");
-            cancelButton.addActionListener(e -> dispose());
-            buttonPane.add(cancelButton);
-        }
-        
+            }
+        });
+        buttonPane.add(okButton);
+
+        JButton cerrar = Tema.botonSecundario("Cerrar");
+        cerrar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                dispose();
+            }
+        });
+        buttonPane.add(cerrar);
+
+        contentPane.add(buttonPane, BorderLayout.SOUTH);
+
         loadVacantes();
     }
 
     public void loadVacantes() {
-        model.setRowCount(0);
-        row = new Object[model.getColumnCount()];
-        
-        for (Vacante v : BolsaLaboral.getInstancia().getVacantes()) {
-            if (v.getEstado().equalsIgnoreCase("activa")) {
-                row[0] = v.getId();
-                row[1] = v.getCentro().getNombreComercial();
-                row[2] = v.getPuesto();
-                row[3] = v.getDescripcion();
-                row[4] = v.getSalarioMin() + " - " + v.getSalarioMax();
-                row[5] = v.getProvincia();
-                row[6] = v.getPerfilRequerido();
-                model.addRow(row);
-            }
-        }
     }
 }

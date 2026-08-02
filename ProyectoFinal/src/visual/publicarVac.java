@@ -120,5 +120,5 @@ public class publicarVac extends JDialog {
     }
 
     public void publicar() {
-    }
+    }s
 }

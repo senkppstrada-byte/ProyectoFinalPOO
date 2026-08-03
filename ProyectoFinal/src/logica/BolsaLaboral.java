@@ -31,7 +31,7 @@ public class BolsaLaboral implements Serializable{
 		return bolsa;
 	}
 	
-	protected static void setInstancia(BolsaLaboral b) {
+	public static void setInstancia(BolsaLaboral b) {
 		bolsa = b;
 	}
 

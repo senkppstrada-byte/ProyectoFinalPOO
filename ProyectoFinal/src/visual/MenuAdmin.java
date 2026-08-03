@@ -9,8 +9,12 @@ import java.awt.GridLayout;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
 
 import javax.swing.BorderFactory;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -58,6 +62,45 @@ public class MenuAdmin extends JFrame {
             }
         });
         mnUtilidad.add(mntmBackup);
+        
+        JMenuItem mntmCargar = new JMenuItem("Cargar respaldo");
+        mntmCargar.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		// 1. Abrir un selector de archivos apuntando a la carpeta de backups
+                JFileChooser chooser = new JFileChooser("backups");
+                chooser.setDialogTitle("Selecciona el archivo de respaldo");
+                
+                int seleccion = chooser.showOpenDialog(null);
+                if (seleccion == JFileChooser.APPROVE_OPTION) {
+                    File archivoBackup = chooser.getSelectedFile();
+                    
+                    try (FileInputStream fis = new FileInputStream(archivoBackup);
+                         ObjectInputStream ois = new ObjectInputStream(fis)) {
+                        
+                       
+                        BolsaLaboral bolsaBackup = (BolsaLaboral) ois.readObject();
+                        
+                        
+                        BolsaLaboral.setInstancia(bolsaBackup);
+                        
+                        
+                        BolsaLaboral.getInstancia().saveDatos(); 
+
+                        JOptionPane.showMessageDialog(null, 
+                            "Backup cargado.", 
+                            "Éxito", 
+                            JOptionPane.INFORMATION_MESSAGE);
+                        
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(null, 
+                            "Error al cargar el archivo de backup: " + ex.getMessage(), 
+                            "Error", 
+                            JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+        	}
+        });
+        mnUtilidad.add(mntmCargar);
 
         JMenu mnOpciones = new JMenu("Opciones");
         menuBar.add(mnOpciones);

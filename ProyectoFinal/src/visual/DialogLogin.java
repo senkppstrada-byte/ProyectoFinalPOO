@@ -2,97 +2,104 @@ package visual;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane; 
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
+import javax.swing.SwingConstants;
 
 import logica.BolsaLaboral;
 
-import javax.swing.JLabel;
-import javax.swing.JButton;
-import java.awt.Font;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-
 public class DialogLogin extends JFrame {
 
-	private final JPanel contentPane = new JPanel();
-	private FondoMenu fondomenu;
+    public static void main(String[] args) {
+        BolsaLaboral.cargarDatos();
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new DialogLogin().setVisible(true);
+            }
+        });
+    }
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		
-		BolsaLaboral.cargarDatos();
-		
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					DialogLogin frame = new DialogLogin();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+    public DialogLogin() {
+        setTitle("Bolsa de Empleo");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(460, 360);
+        setLocationRelativeTo(null);
 
-	/**
-	 * Create the frame.
-	 */
-	
-	//TO DO: kpi menuAdmin
-	public DialogLogin() {
-		setTitle("Bienvenido");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
-		setLocationRelativeTo(null);
+        JPanel panel = new JPanel(new BorderLayout(0, 24));
+        panel.setBackground(Tema.FONDO);
+        panel.setBorder(BorderFactory.createEmptyBorder(30, 40, 24, 40));
+        setContentPane(panel);
 
-		fondomenu = new FondoMenu("/img/mant.png");
-		fondomenu.setLayout(new BorderLayout());
-		setContentPane(fondomenu);
+        JPanel cab = new JPanel(new GridLayout(0, 1, 0, 6));
+        cab.setBackground(Tema.FONDO);
+        JLabel titulo = new JLabel("Bolsa de Empleo", SwingConstants.CENTER);
+        titulo.setFont(Tema.TITULO);
+        titulo.setForeground(Tema.TEXTO);
+        JLabel sub = new JLabel("Sistema de selección de personal", SwingConstants.CENTER);
+        sub.setFont(Tema.NORMAL);
+        sub.setForeground(Tema.TEXTO_SUAVE);
+        cab.add(titulo);
+        cab.add(sub);
+        panel.add(cab, BorderLayout.NORTH);
 
-		contentPane.setOpaque(false);
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		fondomenu.add(contentPane, BorderLayout.CENTER);
-		contentPane.setLayout(null);
-		
-		JButton btnIniciarSesion = new JButton("Iniciar sesion");
-		btnIniciarSesion.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Login login = new Login();
-				login.setVisible(true);
-			}
-		});
-		btnIniciarSesion.setBounds(55, 104, 137, 49);
-		contentPane.add(btnIniciarSesion);
-		
-        JButton btnRegistrarse = new JButton("Registrarse");
-		btnRegistrarse.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Object[] opciones = { "Candidato", "Centro" };
-				int tipo = JOptionPane.showOptionDialog(DialogLogin.this, "Que deseas registrar?", "Registro",
-						JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[0]);
-				if (tipo == 0) {
-					RegistroCandidato reg = new RegistroCandidato();
-					reg.setModal(true);
-					reg.setVisible(true);
-				} else if (tipo == 1) {
-					RegistroCentro reg = new RegistroCentro();
-					reg.setModal(true);
-					reg.setVisible(true);
-				}
-			}
-		});
-		btnRegistrarse.setBounds(241, 104, 137, 49);
-		contentPane.add(btnRegistrarse);
-		
-		JLabel lblTitulo = new JLabel("Proyecto Bolsa de Empleo");
-		lblTitulo.setFont(new Font("Times New Roman", Font.PLAIN, 25));
-		lblTitulo.setBounds(79, 13, 301, 49);
-		contentPane.add(lblTitulo);
-	}
+        JPanel botones = new JPanel(new GridLayout(0, 1, 0, 12));
+        botones.setBackground(Tema.FONDO);
+
+        JButton btnLogin = Tema.botonPrimario("Iniciar sesión");
+        btnLogin.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                new Login().setVisible(true);
+                dispose();
+            }
+        });
+
+        JButton btnReg = Tema.botonSecundario("Registrarse");
+        btnReg.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                abrirRegistro();
+            }
+        });
+
+        JButton btnInvitado = Tema.botonSecundario("Entrar como invitado");
+        btnInvitado.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                VerVacantes v = new VerVacantes(true);
+                v.setModal(true);
+                v.setVisible(true);
+            }
+        });
+
+        botones.add(btnLogin);
+        botones.add(btnReg);
+        botones.add(btnInvitado);
+        panel.add(botones, BorderLayout.CENTER);
+
+        JLabel pie = new JLabel("Proyecto No 6 - Ubicación Laboral", SwingConstants.CENTER);
+        pie.setFont(Tema.NORMAL);
+        pie.setForeground(Tema.TEXTO_SUAVE);
+        panel.add(pie, BorderLayout.SOUTH);
+    }
+
+    private void abrirRegistro() {
+        Object[] opciones = { "Candidato", "Centro" };
+        int tipo = JOptionPane.showOptionDialog(this, "¿Qué deseas registrar?", "Registro",
+                JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[0]);
+        if (tipo == 0) {
+            RegistroCandidato r = new RegistroCandidato();
+            r.setModal(true);
+            r.setVisible(true);
+        } else if (tipo == 1) {
+            RegistroCentro r = new RegistroCentro();
+            r.setModal(true);
+            r.setVisible(true);
+        }
+    }
 }

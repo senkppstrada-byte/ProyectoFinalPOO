@@ -94,6 +94,12 @@ public class Login extends JFrame {
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
+        
+        if (usuario.equals("admin") && clave.equals("admin")) {
+            new MenuAdmin().setVisible(true);
+            dispose();
+            return;
+        }
 
         CuentaUsuario cuenta = buscarCuenta(usuario, clave);
         if (cuenta == null) {

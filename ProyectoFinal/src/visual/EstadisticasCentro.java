@@ -1,6 +1,13 @@
   package visual;
 
   import java.awt.BorderLayout;
+  import java.awt.Color;
+  import java.awt.Dimension;
+  import java.awt.Font;
+  import java.awt.FontMetrics;
+  import java.awt.Graphics;
+  import java.awt.Graphics2D;
+  import java.awt.RenderingHints;
   import java.awt.FlowLayout;
   import java.awt.GridLayout;
   import java.awt.event.ActionEvent;
@@ -48,6 +55,18 @@
           contentPane.add(centro, BorderLayout.CENTER);
 
           centro.add(construirKpis(), BorderLayout.NORTH);
+          int[] porPerfil = disponiblesPorPerfil();
+          GraficoBarras grafico = new GraficoBarras(new String[] { "Tecnico", "Profesional", "Obrero" }, porPerfil);
+          grafico.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Tema.BORDE),
+                  BorderFactory.createEmptyBorder(10, 10, 10, 10)));
+          JPanel cajaGrafico = new JPanel(new BorderLayout(0, 6));
+          cajaGrafico.setBackground(Tema.FONDO);
+          JLabel lblG = new JLabel("Candidatos disponibles por perfil");
+          lblG.setFont(Tema.SUBTITULO);
+          lblG.setForeground(Tema.TEXTO);
+          cajaGrafico.add(lblG, BorderLayout.NORTH);
+          cajaGrafico.add(grafico, BorderLayout.CENTER);
+          centro.add(cajaGrafico, BorderLayout.CENTER);
 
           contentPane.add(construirSur(), BorderLayout.SOUTH);
       }
@@ -179,5 +198,78 @@
               }
           }
           return n;
+      }
+      private int[] disponiblesPorPerfil() {
+          int tec = 0;
+          int pro = 0;
+          int obr = 0;
+          for (Candidato c : BolsaLaboral.getInstancia().getCandidatos()) {
+              if (Util.estaDisponible(c)) {
+                  String p = Util.perfil(c);
+                  if (p.equals("Tecnico")) {
+                      tec++;
+                  } else if (p.equals("Profesional")) {
+                      pro++;
+                  } else if (p.equals("Obrero")) {
+                      obr++;
+                  }
+              }
+          }
+          return new int[] { tec, pro, obr };
+      }
+
+      private class GraficoBarras extends JPanel {
+
+          private String[] etiquetas;
+          private int[] valores;
+
+          private GraficoBarras(String[] etiquetas, int[] valores) {
+              this.etiquetas = etiquetas;
+              this.valores = valores;
+              setBackground(Tema.PANEL);
+              setPreferredSize(new Dimension(400, 200));
+          }
+
+          protected void paintComponent(Graphics g) {
+              super.paintComponent(g);
+              Graphics2D g2 = (Graphics2D) g;
+              g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+              int w = getWidth();
+              int h = getHeight();
+              int margen = 30;
+              int base = h - margen;
+              int maximo = 1;
+              for (int v : valores) {
+                  if (v > maximo) {
+                      maximo = v;
+                  }
+              }
+
+              g2.setColor(Tema.BORDE);
+              g2.drawLine(margen, base, w - margen, base);
+
+              int n = valores.length;
+              int ancho = (w - 2 * margen) / (n * 2);
+              FontMetrics fm = g2.getFontMetrics(Tema.NORMAL);
+              g2.setFont(Tema.NORMAL);
+
+              for (int i = 0; i < n; i++) {
+                  int x = margen + ancho + (i * 2 * ancho) - ancho / 2;
+                  int altura = (int) ((base - margen) * (valores[i] / (float) maximo));
+                  int y = base - altura;
+
+                  g2.setColor(Tema.PRIMARIO);
+                  g2.fillRect(x, y, ancho, altura);
+
+                  g2.setColor(Tema.TEXTO);
+                  String val = String.valueOf(valores[i]);
+                  g2.drawString(val, x + ancho / 2 - fm.stringWidth(val) / 2, y - 4);
+
+                  g2.setColor(Tema.TEXTO_SUAVE);
+                  String et = etiquetas[i];
+                  g2.drawString(et, x + ancho / 2 - fm.stringWidth(et) / 2, base + 18);
+              }
+          }
       }
   }

@@ -20,6 +20,12 @@ public class DialogLogin extends JFrame {
 
     public static void main(String[] args) {
         BolsaLaboral.cargarDatos();
+        BolsaLaboral bolsa = BolsaLaboral.getInstancia();
+        BolsaLaboral.generadorIdCand = bolsa.getCandidatos().size() + 1;
+        BolsaLaboral.generadorIdCent = bolsa.getCentros().size() + 1;
+        BolsaLaboral.generadorIdCuenta = bolsa.getCandidatos().size() + bolsa.getCentros().size() + 1;
+        BolsaLaboral.generadorIdVac = bolsa.getVacantes().size() + 1;
+        BolsaLaboral.generadorIdPos = bolsa.getPostulaciones().size() + 1;
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new DialogLogin().setVisible(true);

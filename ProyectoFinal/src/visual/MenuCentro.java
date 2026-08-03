@@ -51,7 +51,18 @@ public class MenuCentro extends JFrame {
         });
         mnVacantes.add(mntmLista);
 
+        JMenu mnEstadisticas = new JMenu("Estadísticas");
+        menuBar.add(mnEstadisticas);
 
+        JMenuItem mntmKpi = new JMenuItem("Ver estadísticas");
+        mntmKpi.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                EstadisticasCentro est = new EstadisticasCentro();
+                est.setModal(true);
+                est.setVisible(true);
+            }
+        });
+        mnEstadisticas.add(mntmKpi);
 
         JMenu mnOpciones = new JMenu("Opciones");
         menuBar.add(mnOpciones);

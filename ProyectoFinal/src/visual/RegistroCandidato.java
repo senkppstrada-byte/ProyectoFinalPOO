@@ -131,6 +131,11 @@ public class RegistroCandidato extends JDialog {
 
         form.add(new JLabel("Perfil:"));
         cmbPerfil = new JComboBox<String>(new String[] { "Tecnico", "Profesional", "Obrero" });
+        cmbPerfil.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                actualizarCamposPerfil();
+            }
+        });
         form.add(cmbPerfil);
 
         form.add(new JLabel("Área (Técnico):"));
@@ -148,6 +153,48 @@ public class RegistroCandidato extends JDialog {
         form.add(new JLabel("Destrezas del obrero (separadas por coma):"));
         txtDestrezas = new JTextField();
         form.add(txtDestrezas);
+
+        actualizarCamposPerfil();
+    }
+
+    private void actualizarCamposPerfil() {
+        String perfil = (String) cmbPerfil.getSelectedItem();
+        boolean tec = perfil.equalsIgnoreCase("Tecnico");
+        boolean pro = perfil.equalsIgnoreCase("Profesional");
+        boolean obr = perfil.equalsIgnoreCase("Obrero");
+        txtArea.setEnabled(tec);
+        spnExperiencia.setEnabled(tec);
+        txtTitulo.setEnabled(pro);
+        txtDestrezas.setEnabled(obr);
+        if (!tec) {
+            txtArea.setText("");
+        }
+        if (!pro) {
+            txtTitulo.setText("");
+        }
+        if (!obr) {
+            txtDestrezas.setText("");
+        }
+    }
+
+    private boolean soloLetras(String s) {
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (!Character.isLetter(c) && c != ' ') {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean soloDigitos(String s) {
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (!Character.isDigit(c) && c != '-') {
+                return false;
+            }
+        }
+        return true;
     }
 
     public void registrar() {
@@ -163,6 +210,36 @@ public class RegistroCandidato extends JDialog {
         if (usuario.isEmpty() || clave.isEmpty() || correo.isEmpty() || nombre.isEmpty() || cedula.isEmpty()
                 || provincia.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Completa todos los campos obligatorios.", "Faltan datos",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (correo.indexOf('@') < 0 || correo.indexOf('.') < 0) {
+            JOptionPane.showMessageDialog(this, "El correo no es válido.", "Datos inválidos",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (!soloLetras(nombre)) {
+            JOptionPane.showMessageDialog(this, "El nombre solo puede contener letras.", "Datos inválidos",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (!soloDigitos(cedula)) {
+            JOptionPane.showMessageDialog(this, "La cedula solo puede contener números.", "Datos inválidos",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (perfil.equalsIgnoreCase("Tecnico") && txtArea.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Indica el área del técnico.", "Faltan datos",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (perfil.equalsIgnoreCase("Profesional") && txtTitulo.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Indica el título del profesional.", "Faltan datos",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if (perfil.equalsIgnoreCase("Obrero") && txtDestrezas.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Indica al menos una destreza del obrero.", "Faltan datos",
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
